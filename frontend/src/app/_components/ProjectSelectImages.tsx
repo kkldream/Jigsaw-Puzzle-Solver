@@ -1,3 +1,5 @@
+import SimpleGallery from "@/app/_components/Photoswipe";
+
 const files = [
     {
         name: '蠟筆小新',
@@ -23,25 +25,20 @@ const files = [
         name: '撒了一地拼圖',
         source: 'https://shoplineimg.com/62a06588ddc6f4001641725d/62b0781603336b002412fd2a/800x.jpg?',
     },
-]
+];
 
 export default function ProjectSelectImages({max}) {
     return (
         <ul role="list"
             className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-            {(max ? files.splice(0, max) : files).map((file, index) => (
-                <li key={index} className="relative">
-                    <div
-                        className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
-                        <img src={file.source} alt=""
-                             className="pointer-events-none object-cover group-hover:opacity-75"/>
-                        <button type="button" className="absolute inset-0 focus:outline-none">
-                            <span className="sr-only">View details for {file.name}</span>
-                        </button>
+            {files.filter((_, index) => max ? index < max : true).map((file, index) => (
+                <li key={index}>
+                    <div className="h-48">
+                        <SimpleGallery id={file.name} images={[{largeURL: file.source}]}/>
                     </div>
-                    <p className="pointer-events-none mt-2 block truncate text-sm font-medium text-gray-900">{file.name}</p>
+                    <p className="mt-2 block truncate text-sm font-medium text-gray-900">{file.name}</p>
                 </li>
             ))}
         </ul>
-    )
+    );
 }

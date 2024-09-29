@@ -1,6 +1,6 @@
 import {Fragment, useRef, useState} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import {Image} from "@/app/project/[projectId]/page";
+import {ImageViewer} from "@/app/project/[projectId]/page";
 
 export default function NewProjectModel({open, setOpen}) {
     const cancelButtonRef = useRef(null);
@@ -122,7 +122,7 @@ function UploadPicture({selectedImage, setSelectedImage}: {
                 htmlFor="file-upload"
                 className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer"
             >
-                {selectedImage ? <Image src={selectedImage}/> : (
+                {selectedImage ? <ImageViewer src={selectedImage}/> : (
                     <div>
                         <span className="m-8 block text-sm font-semibold text-gray-900">上傳完整拼圖</span>
                     </div>

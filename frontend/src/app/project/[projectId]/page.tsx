@@ -4,8 +4,21 @@ import ProjectSelectImages from "@/app/_components/ProjectSelectImages";
 import SearchResult from "@/app/project/[projectId]/_components/SearchResult";
 import {useState} from "react";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
+import SimpleGallery from "@/app/_components/Photoswipe";
 
 const completeImageUrl = "https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80";
+const files = [
+    {
+        id: "image01",
+        time: new Date(1727583185078),
+        source: 'https://en.pimg.jp/011/226/869/1/11226869.jpg',
+    },
+    {
+        id: "image02",
+        time: new Date(1727582185000),
+        source: 'https://img.gogoshop.cloud/598e6646/0REBYaSbgKZ.jpg',
+    },
+];
 
 export default function Page({params}: { params: { projectId: string } }) {
     const {projectId} = params;
@@ -47,7 +60,7 @@ export default function Page({params}: { params: { projectId: string } }) {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-6">
                                     <div>
                                         <ImageHeaderText text={"參考完整拼圖"}/>
-                                        <Image src={completeImageUrl}/>
+                                        <ImageViewer id="completeImage" src={completeImageUrl}/>
                                     </div>
                                     <div>
                                         <ImageHeaderText text={"上傳部分拼圖"}/>
@@ -74,7 +87,17 @@ export default function Page({params}: { params: { projectId: string } }) {
                             <CenterText text={"過去尋找記錄"}/>
                             <div className="overflow-hidden rounded-lg bg-white shadow mb-4">
                                 <div className="px-4 py-5 sm:p-6">
-                                    <ProjectSelectImages/>
+                                    <ul role="list"
+                                        className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+                                        {files.map((file, index) => (
+                                            <li key={index}>
+                                                <div className="h-48">
+                                                    <SimpleGallery id={file.id} images={[{largeURL: file.source}]}/>
+                                                </div>
+                                                <p className="mt-2 block truncate text-sm font-medium text-gray-900">{file.time.toLocaleString()}</p>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
                             </div>
 
@@ -101,7 +124,11 @@ function UploadPicture({selectedImage, setSelectedImage}: {
                 htmlFor="file-upload"
                 className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer"
             >
-                {selectedImage ? <Image src={selectedImage}/> : (
+                {selectedImage ? (
+                    <div className="group aspect-h-7 aspect-w-10 overflow-hidden rounded-lg bg-gray-100">
+                        <img src={selectedImage} className="object-contain group-hover:opacity-75"/>
+                    </div>
+                ) : (
                     <div>
                         <span className="m-8 block text-sm font-semibold text-gray-900">Upload a picture</span>
                     </div>
@@ -138,10 +165,11 @@ export function ImageHeaderText({text}) {
     );
 }
 
-export function Image({src}) {
+export function ImageViewer({id, src}) {
     return (
         <div className="group aspect-h-7 aspect-w-10 overflow-hidden rounded-lg bg-gray-100">
-            <img src={src} className="object-contain group-hover:opacity-75"/>
+            {/*<img src={src} className="object-contain group-hover:opacity-75"/>*/}
+            <SimpleGallery id={id} images={[{largeURL: src}]} objectFit="contain"/>
         </div>
     );
 }
