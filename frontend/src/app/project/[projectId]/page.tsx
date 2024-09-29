@@ -42,6 +42,10 @@ export default function Page({params}: { params: { projectId: string } }) {
         setLoading(false);
     }
 
+    function handleHistoryClick() {
+
+    }
+
     return (
         <div className="py-12 sm:py-16 lg:pb-40">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -91,10 +95,14 @@ export default function Page({params}: { params: { projectId: string } }) {
                                         className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
                                         {files.map((file, index) => (
                                             <li key={index}>
-                                                <div className="h-48">
-                                                    <SimpleGallery id={file.id} images={[{largeURL: file.source}]}/>
-                                                </div>
-                                                <p className="mt-2 block truncate text-sm font-medium text-gray-900">{file.time.toLocaleString()}</p>
+                                                <a href="#" onClick={() => handleHistoryClick()}>
+                                                    <div
+                                                        className="group aspect-h-7 aspect-w-10 overflow-hidden rounded-lg bg-gray-100">
+                                                        <img src={file.source}
+                                                             className="object-cover group-hover:opacity-75"/>
+                                                    </div>
+                                                    <p className="mt-2 block truncate text-sm font-medium text-gray-900">{file.time.toLocaleString()}</p>
+                                                </a>
                                             </li>
                                         ))}
                                     </ul>
@@ -168,8 +176,9 @@ export function ImageHeaderText({text}) {
 export function ImageViewer({id, src}) {
     return (
         <div className="group aspect-h-7 aspect-w-10 overflow-hidden rounded-lg bg-gray-100">
-            {/*<img src={src} className="object-contain group-hover:opacity-75"/>*/}
-            <SimpleGallery id={id} images={[{largeURL: src}]} objectFit="contain"/>
+            <div className="group-hover:opacity-75">
+                <SimpleGallery id={id} images={[{largeURL: src}]} objectFit="contain"/>
+            </div>
         </div>
     );
 }
