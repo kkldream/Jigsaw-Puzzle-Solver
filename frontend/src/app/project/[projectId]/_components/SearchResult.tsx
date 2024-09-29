@@ -12,18 +12,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const resultImages = [
-    {
-        name: "原始圖",
-        src: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png",
-    },
-    {
-        name: "分布圖",
-        src: "https://media.istockphoto.com/id/1316134499/photo/a-concept-image-of-a-magnifying-glass-on-blue-background-with-a-word-example-zoom-inside-the.jpg?s=612x612&w=0&k=20&c=sZM5HlZvHFYnzjrhaStRpex43URlxg6wwJXff3BE9VA=",
-    },
-];
-
-export default function SearchResult() {
+export default function SearchResult({resultImages}) {
     const [currentTab, setCurrentTab] = useState<number>(0);
 
     function handleClick(index: number) {
@@ -35,7 +24,7 @@ export default function SearchResult() {
         href: resultImage.src,
         current: index === currentTab,
     }));
-    return (
+    return resultImages.length === 0 ? <div className="pb-4"></div> : (
         <div>
             <div className="px-6 pb-4">
                 <ImageHeaderText text={`結果${resultImages[currentTab].name}`}/>

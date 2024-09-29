@@ -1,14 +1,34 @@
 "use client";
 
-import ProjectSelectImages from "@/app/components/ProjectSelectImages";
+import ProjectSelectImages from "@/app/_components/ProjectSelectImages";
 import SearchResult from "@/app/project/[projectId]/_components/SearchResult";
 import {useState} from "react";
+import LoadingSpinner from "@/app/_components/LoadingSpinner";
 
 const completeImageUrl = "https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80";
 
 export default function Page({params}: { params: { projectId: string } }) {
     const {projectId} = params;
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [resultImages, setResultImages] = useState<{ name: string; src: string }[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+
+    async function handleResultImages() {
+        setLoading(true);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setResultImages([
+            {
+                name: "原始圖",
+                src: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png",
+            },
+            {
+                name: "分布圖",
+                src: "https://media.istockphoto.com/id/1316134499/photo/a-concept-image-of-a-magnifying-glass-on-blue-background-with-a-word-example-zoom-inside-the.jpg?s=612x612&w=0&k=20&c=sZM5HlZvHFYnzjrhaStRpex43URlxg6wwJXff3BE9VA=",
+            },
+        ]);
+        setLoading(false);
+    }
+
     return (
         <div className="py-12 sm:py-16 lg:pb-40">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -35,19 +55,23 @@ export default function Page({params}: { params: { projectId: string } }) {
                                                        setSelectedImage={setSelectedImage}/>
                                     </div>
                                 </div>
-
                                 <div className="mt-4 flex justify-center">
                                     <button
                                         type="button"
-                                        className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                        className={`rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm
+                                                    ${selectedImage === null ? "bg-gray-500" : "bg-indigo-600 hover:bg-indigo-500"} 
+                                                    focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+                                        onClick={handleResultImages}
+                                        disabled={selectedImage === null}
                                     >
+                                        {loading && <LoadingSpinner/>}
                                         開始尋找
                                     </button>
                                 </div>
-                                <SearchResult/>
+                                <SearchResult resultImages={resultImages}/>
                             </div>
 
-                            <CenterText text={"拼圖尋找記錄"}/>
+                            <CenterText text={"過去尋找記錄"}/>
                             <div className="overflow-hidden rounded-lg bg-white shadow mb-4">
                                 <div className="px-4 py-5 sm:p-6">
                                     <ProjectSelectImages/>
