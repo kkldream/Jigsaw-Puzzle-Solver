@@ -6,7 +6,6 @@ import {useState} from "react";
 
 export default function Page() {
     const [modelShow, setModelShow] = useState<boolean>(false);
-
     return (
         <>
             <div className="py-12 sm:py-16 lg:pb-40">
@@ -38,5 +37,5 @@ export default function Page() {
             </div>
             <NewProjectModel open={modelShow} setOpen={setModelShow}/>
         </>
-    )
+    );
 }

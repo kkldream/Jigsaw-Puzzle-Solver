@@ -1,4 +1,5 @@
 export interface ResponseBase<T> {
+    time: Date;
     success: boolean;
     result: T;
     error: null | {
@@ -10,6 +11,7 @@ export interface ResponseBase<T> {
 
 export function ResponseSuccess<T>(result: T) {
     const res: ResponseBase<T> = {
+        time: new Date(),
         success: true,
         result: result,
         error: null,
@@ -19,6 +21,7 @@ export function ResponseSuccess<T>(result: T) {
 
 export function ResponseFail(err: Error) {
     const res: ResponseBase<null> = {
+        time: new Date(),
         success: false,
         result: null,
         error: {
