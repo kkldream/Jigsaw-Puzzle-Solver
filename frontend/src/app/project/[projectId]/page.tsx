@@ -1,6 +1,5 @@
 "use client";
 
-import ProjectSelectImages from "@/app/_components/ProjectSelectImages";
 import SearchResult from "@/app/project/[projectId]/_components/SearchResult";
 import {useState} from "react";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
@@ -153,31 +152,31 @@ function UploadPicture({selectedImage, setSelectedImage}: {
     );
 }
 
-function CenterText({text}) {
+function CenterText(props: { text: string; }) {
     return (
         <div className="mt-6 mb-4 mx-auto max-w-2xl text-center">
             <p className={`text-2xl sm:text-xl font-bold tracking-tight text-gray-900`}>
-                {text}
+                {props.text}
             </p>
         </div>
     );
 }
 
-export function ImageHeaderText({text}) {
+export function ImageHeaderText(props: { text: string; }) {
     return (
         <div className="mt-4 mb-2 mx-auto max-w-2xl text-center">
             <p className={`text-2xl sm:text-base font-bold tracking-tight text-gray-900`}>
-                {text}
+                {props.text}
             </p>
         </div>
     );
 }
 
-export function ImageViewer({id, src}) {
+export function ImageViewer(props: { id: string; src: string; }) {
     return (
         <div className="group aspect-h-7 aspect-w-10 overflow-hidden rounded-lg bg-gray-100">
             <div className="group-hover:opacity-75">
-                <SimpleGallery id={id} images={[{largeURL: src}]} objectFit="contain"/>
+                <SimpleGallery id={props.id} images={[{largeURL: props.src}]} objectFit="contain"/>
             </div>
         </div>
     );

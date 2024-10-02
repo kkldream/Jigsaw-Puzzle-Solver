@@ -1,14 +1,22 @@
 import {Fragment, useRef, useState} from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import {Dialog, Transition} from '@headlessui/react'
 import {ImageViewer} from "@/app/project/[projectId]/page";
 
-export default function NewProjectModel({open, setOpen}) {
+export default function NewProjectModel(props: {
+    open: boolean;
+    setOpen: (value: (((prevState: boolean) => boolean) | boolean)) => void;
+}) {
     const cancelButtonRef = useRef(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+    function clickOk() {
+
+        props.setOpen(false);
+    }
+
     return (
-        <Transition.Root show={open} as={Fragment}>
-            <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+        <Transition.Root show={props.open} as={Fragment}>
+            <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={props.setOpen}>
                 <Transition.Child
                     as={Fragment}
                     enter="ease-out duration-300"
@@ -18,7 +26,7 @@ export default function NewProjectModel({open, setOpen}) {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"/>
                 </Transition.Child>
 
                 <div className="fixed inset-0 z-10 overflow-y-auto">
@@ -32,7 +40,8 @@ export default function NewProjectModel({open, setOpen}) {
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
-                            <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+                            <Dialog.Panel
+                                className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                                 <div>
                                     <div className="text-center">
                                         <Dialog.Title as="h3"
@@ -66,14 +75,14 @@ export default function NewProjectModel({open, setOpen}) {
                                     <button
                                         type="button"
                                         className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
-                                        onClick={() => setOpen(false)}
+                                        onClick={clickOk}
                                     >
                                         確定
                                     </button>
                                     <button
                                         type="button"
                                         className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-                                        onClick={() => setOpen(false)}
+                                        onClick={() => props.setOpen(false)}
                                         ref={cancelButtonRef}
                                     >
                                         取消
@@ -88,14 +97,14 @@ export default function NewProjectModel({open, setOpen}) {
     )
 }
 
-function TextInput({title, hint}) {
+function TextInput(props: { title: string; hint?: string; }) {
     return (
         <div className="relative">
             <label
                 htmlFor="name"
                 className="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900"
             >
-                {title}
+                {props.title}
             </label>
             <input
                 type="text"
@@ -122,7 +131,7 @@ function UploadPicture({selectedImage, setSelectedImage}: {
                 htmlFor="file-upload"
                 className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer"
             >
-                {selectedImage ? <ImageViewer src={selectedImage}/> : (
+                {selectedImage ? <ImageViewer id="UploadPicture" src={selectedImage}/> : (
                     <div>
                         <span className="m-8 block text-sm font-semibold text-gray-900">上傳完整拼圖</span>
                     </div>

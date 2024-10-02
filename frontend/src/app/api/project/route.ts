@@ -13,13 +13,8 @@ export interface ApiProjectGet {
 
 export async function GET(request: Request) {
     try {
-        let limit = 10;
-        try {
-            const {searchParams} = new URL(request.url);
-            limit = parseInt(searchParams.get('limit') as string);
-        } catch (e) {
-            console.log("Failed to parse limit");
-        }
+        const {searchParams} = new URL(request.url);
+        const limit = parseInt(searchParams.get('limit') as string);
         const files = await db.project
             .find({isDeleted: false})
             .limit(limit)

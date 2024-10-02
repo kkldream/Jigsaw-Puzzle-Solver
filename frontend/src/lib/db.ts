@@ -7,7 +7,7 @@ function getModel<T>(modelName: string, schema: mongoose.Schema): mongoose.Model
 }
 
 const db = {
-    connect: async (mongodbUri: string) => {
+    connect: async (mongodbUri: string | undefined) => {
         if (!mongodbUri) throw new Error("MONGODB_URI is not set");
         await mongoose.connect(mongodbUri)
     },
