@@ -9,7 +9,7 @@ export interface ResponseBase<T> {
     };
 }
 
-export function ResponseSuccess<T>(result: T) {
+export function ResponseSuccess<T = null>(result: T) {
     const res: ResponseBase<T> = {
         time: new Date(),
         success: true,

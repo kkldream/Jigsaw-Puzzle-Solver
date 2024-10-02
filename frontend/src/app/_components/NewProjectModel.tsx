@@ -1,17 +1,44 @@
 import {Fragment, useRef, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
 import {ImageViewer} from "@/app/project/[projectId]/page";
+import {toBase64} from "@/service/fileService";
+import {useRouter} from 'next/navigation'
+import {ResponseBase} from "@/app/api/responseMethod";
+import {ApiProjectPost} from "@/app/api/project/route";
 
 export default function NewProjectModel(props: {
     open: boolean;
     setOpen: (value: (((prevState: boolean) => boolean) | boolean)) => void;
 }) {
+    const router = useRouter();
     const cancelButtonRef = useRef(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [projectName, setProjectName] = useState<string>("");
 
-    function clickOk() {
+    async function clickOk() {
+        if (!imageFile || projectName === "") throw new Error("Invalid input");
+        const res = await (await fetch('/api/project', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: projectName,
+                base64: await toBase64(imageFile),
+            }),
+        })).json() as ResponseBase<ApiProjectPost>;
+        if (res.success) {
+            await router.push(`/project/${res.result.projectId}`);
+        }
+        clickCancel();
+    }
 
+    function clickCancel() {
         props.setOpen(false);
+        setProjectName("");
+        setSelectedImage(null);
+        setImageFile(null);
     }
 
     return (
@@ -49,7 +76,21 @@ export default function NewProjectModel(props: {
                                             建立新的專案
                                         </Dialog.Title>
                                         <div className="mt-2">
-                                            <TextInput title="專案名稱"/>
+                                            <div className="relative">
+                                                <label
+                                                    htmlFor="name"
+                                                    className="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900"
+                                                >
+                                                    專案名稱
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="name"
+                                                    id="name"
+                                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                    onChange={(e) => setProjectName(e.target.value)}
+                                                />
+                                            </div>
                                         </div>
                                         <div className="mt-2">
                                             <p className="text-sm text-gray-500">
@@ -59,7 +100,8 @@ export default function NewProjectModel(props: {
                                         <div className="mt-3">
                                             <div>
                                                 <UploadPicture selectedImage={selectedImage}
-                                                               setSelectedImage={setSelectedImage}/>
+                                                               setSelectedImage={setSelectedImage}
+                                                               setImageFile={setImageFile}/>
                                             </div>
                                         </div>
                                         <div className="mt-2">
@@ -82,7 +124,7 @@ export default function NewProjectModel(props: {
                                     <button
                                         type="button"
                                         className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-                                        onClick={() => props.setOpen(false)}
+                                        onClick={clickCancel}
                                         ref={cancelButtonRef}
                                     >
                                         取消
@@ -97,32 +139,15 @@ export default function NewProjectModel(props: {
     )
 }
 
-function TextInput(props: { title: string; hint?: string; }) {
-    return (
-        <div className="relative">
-            <label
-                htmlFor="name"
-                className="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900"
-            >
-                {props.title}
-            </label>
-            <input
-                type="text"
-                name="name"
-                id="name"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-        </div>
-    );
-}
-
-function UploadPicture({selectedImage, setSelectedImage}: {
+function UploadPicture(props: {
     selectedImage: string | null;
     setSelectedImage: (value: (((prevState: (string | null)) => (string | null)) | string | null)) => void;
+    setImageFile: (value: (((prevState: (File | null)) => (File | null)) | File | null)) => void;
 }) {
     const onSelectedImage = (e) => {
         if (e.target.files && e.target.files[0]) {
-            setSelectedImage(URL.createObjectURL(e.target.files[0]));
+            props.setImageFile(e.target.files[0]);
+            props.setSelectedImage(URL.createObjectURL(e.target.files[0]));
         }
     };
     return (
@@ -131,7 +156,7 @@ function UploadPicture({selectedImage, setSelectedImage}: {
                 htmlFor="file-upload"
                 className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer"
             >
-                {selectedImage ? <ImageViewer id="UploadPicture" src={selectedImage}/> : (
+                {props.selectedImage ? <ImageViewer id="UploadPicture" src={props.selectedImage}/> : (
                     <div>
                         <span className="m-8 block text-sm font-semibold text-gray-900">上傳完整拼圖</span>
                     </div>
