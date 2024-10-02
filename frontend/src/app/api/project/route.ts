@@ -23,6 +23,7 @@ export async function GET(request: Request) {
         const limit = parseInt(searchParams.get('limit') as string);
         const files = await db.project
             .find({isDeleted: false})
+            .sort({createdAt: -1})
             .limit(limit)
             .exec();
         const projects = files.map(file => ({

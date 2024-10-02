@@ -1,11 +1,13 @@
 "use client";
 
 import SearchResult from "@/app/project/[projectId]/_components/SearchResult";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
 import SimpleGallery from "@/app/_components/Photoswipe";
+import {ResponseBase} from "@/app/api/responseMethod";
+import {ApiProjectIdGet} from "@/app/api/project/[projectId]/route";
+import {ApiSolvePost, SolveItem} from "@/app/api/solve/route";
 
-const completeImageUrl = "https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80";
 const files = [
     {
         id: "image01",
@@ -21,23 +23,40 @@ const files = [
 
 export default function Page({params}: { params: { projectId: string } }) {
     const {projectId} = params;
+    const [projectDoc, setProjectDoc] = useState<{
+        name: string;
+        imageUrl: string;
+    }>({name: "", imageUrl: ""});
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const [resultImages, setResultImages] = useState<{ name: string; src: string }[]>([]);
+    const [resultImages, setResultImages] = useState<SolveItem[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        fetch(`/api/project/${projectId}`)
+            .then(response => response.json())
+            .then((data: ResponseBase<ApiProjectIdGet>) => {
+                setProjectDoc({
+                    name: data.result.name,
+                    imageUrl: data.result.imageUrl,
+                });
+            });
+    }, [projectId]);
 
     async function handleResultImages() {
         setLoading(true);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setResultImages([
-            {
-                name: "原始圖",
-                src: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png",
+        if (!selectedImage) throw new Error("selectedImage is null");
+        const res = await (await fetch(`/api/solve`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
             },
-            {
-                name: "分布圖",
-                src: "https://media.istockphoto.com/id/1316134499/photo/a-concept-image-of-a-magnifying-glass-on-blue-background-with-a-word-example-zoom-inside-the.jpg?s=612x612&w=0&k=20&c=sZM5HlZvHFYnzjrhaStRpex43URlxg6wwJXff3BE9VA=",
-            },
-        ]);
+            body: JSON.stringify({
+                projectId: projectId,
+                base64: selectedImage,
+            }),
+        })).json() as ResponseBase<ApiSolvePost>;
+        console.log(res);
+        setResultImages(res.result.solves);
         setLoading(false);
     }
 
@@ -50,7 +69,7 @@ export default function Page({params}: { params: { projectId: string } }) {
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="mx-auto max-w-2xl text-center">
                     <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-                        Project {projectId}
+                        Project {projectDoc.name}
                     </h1>
                 </div>
                 <div className="mt-8 flow-root sm:mt-12">
@@ -63,7 +82,7 @@ export default function Page({params}: { params: { projectId: string } }) {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-6">
                                     <div>
                                         <ImageHeaderText text={"參考完整拼圖"}/>
-                                        <ImageViewer id="completeImage" src={completeImageUrl}/>
+                                        <ImageViewer id="completeImage" src={projectDoc.imageUrl}/>
                                     </div>
                                     <div>
                                         <ImageHeaderText text={"上傳部分拼圖"}/>
@@ -94,7 +113,7 @@ export default function Page({params}: { params: { projectId: string } }) {
                                         className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
                                         {files.map((file, index) => (
                                             <li key={index}>
-                                                <a href="#" onClick={() => handleHistoryClick()}>
+                                                <a href={`#${index}`} onClick={() => handleHistoryClick()}>
                                                     <div
                                                         className="group aspect-h-7 aspect-w-10 overflow-hidden rounded-lg bg-gray-100">
                                                         <img src={file.source}

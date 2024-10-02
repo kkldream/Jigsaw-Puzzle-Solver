@@ -1,11 +1,12 @@
 import {ImageViewer, ImageHeaderText} from "@/app/project/[projectId]/page";
 import {useState} from "react";
+import {SolveItem} from "@/app/api/solve/route";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function SearchResult({resultImages}) {
+export default function SearchResult({resultImages}: { resultImages: SolveItem[] }) {
     const [currentTab, setCurrentTab] = useState<number>(0);
 
     function handleClick(index: number) {
@@ -14,7 +15,7 @@ export default function SearchResult({resultImages}) {
 
     const tabs = resultImages.map((resultImage, index) => ({
         name: resultImage.name,
-        href: resultImage.src,
+        href: resultImage.base64,
         current: index === currentTab,
     }));
     return resultImages.length === 0 ? <div className="pb-4"></div> : (
@@ -23,7 +24,7 @@ export default function SearchResult({resultImages}) {
                 <ImageHeaderText text={`結果${resultImages[currentTab].name}`}/>
                 <div className="flex justify-center">
                     <div className="w-11/12">
-                        <ImageViewer id="resultImages" src={resultImages[currentTab].src}/>
+                        <ImageViewer id="resultImages" src={resultImages[currentTab].base64}/>
                         <div className={(resultImages.length <= 1 ? "hidden" : "mt-2")}>
                             <div className="sm:hidden">
                                 <label htmlFor="tabs" className="sr-only">
