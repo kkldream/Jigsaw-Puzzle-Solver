@@ -1,6 +1,7 @@
-import {ImageViewer, ImageHeaderText} from "@/app/project/[projectId]/page";
+import {ImageHeaderText} from "@/app/project/[projectId]/page";
 import {useState} from "react";
 import {SolveItem} from "@/app/api/solve/route";
+import {ImageViewer} from "@/app/_components/ImageViewer";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')

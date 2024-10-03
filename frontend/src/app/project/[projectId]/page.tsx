@@ -3,10 +3,10 @@
 import SearchResult from "@/app/project/[projectId]/_components/SearchResult";
 import {useEffect, useState} from "react";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
-import SimpleGallery from "@/app/_components/Photoswipe";
 import {ResponseBase} from "@/app/api/responseMethod";
 import {ApiSolvePost, SolveItem} from "@/app/api/solve/route";
 import {ProjectItem} from "@/app/api/project/route";
+import {ImageViewer} from "@/app/_components/ImageViewer";
 
 export default function Page({params}: { params: { projectId: string } }) {
     const {projectId} = params;
@@ -62,7 +62,8 @@ export default function Page({params}: { params: { projectId: string } }) {
                     </h1>
                 </div>
                 <div className="mt-8 flow-root sm:mt-12">
-                    <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-2">
+                    <div
+                        className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-2">
                         <div className="mx-auto mb-8 max-w-7xl sm:px-6 lg:px-8">
                             <CenterText text={"尋找拼圖位置"}/>
                             <div className="overflow-hidden rounded-lg bg-white shadow">
@@ -157,16 +158,6 @@ export function ImageHeaderText(props: { text: string; }) {
             <p className={`text-2xl sm:text-base font-bold tracking-tight text-gray-900`}>
                 {props.text}
             </p>
-        </div>
-    );
-}
-
-export function ImageViewer(props: { id: string; src: string; }) {
-    return (
-        <div className="group aspect-h-7 aspect-w-10 overflow-hidden rounded-lg bg-gray-100">
-            <div className="group-hover:opacity-75">
-                <SimpleGallery id={props.id} images={[{largeURL: props.src}]} objectFit="contain"/>
-            </div>
         </div>
     );
 }

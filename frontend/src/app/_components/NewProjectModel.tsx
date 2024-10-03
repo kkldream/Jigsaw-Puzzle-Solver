@@ -1,10 +1,10 @@
 import {Fragment, useRef, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
-import {ImageViewer} from "@/app/project/[projectId]/page";
 import {toBase64} from "@/service/fileService";
 import {useRouter} from 'next/navigation'
 import {ResponseBase} from "@/app/api/responseMethod";
 import {ApiProjectPost} from "@/app/api/project/route";
+import {ImageViewer} from "@/app/_components/ImageViewer";
 
 export default function NewProjectModel(props: {
     open: boolean;
