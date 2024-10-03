@@ -45,6 +45,12 @@ export default function Page({params}: { params: { projectId: string } }) {
     async function handleResultImages() {
         setLoading(true);
         if (!selectedImage) throw new Error("selectedImage is null");
+        const blob = await fetch(selectedImage).then((r) => r.blob());
+        const selectedImageBase64 = await new Promise<string>((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve((reader.result as string).split(',')[1]);
+            reader.readAsDataURL(blob);
+        });
         const res = await (await fetch(`/api/solve`, {
             method: "POST",
             headers: {
@@ -52,7 +58,7 @@ export default function Page({params}: { params: { projectId: string } }) {
             },
             body: JSON.stringify({
                 projectId: projectId,
-                base64: selectedImage,
+                base64: selectedImageBase64,
             }),
         })).json() as ResponseBase<ApiSolvePost>;
         console.log(res);

@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
 import {pathToImageBase64} from './utils.js';
 
-const executablePath = '../python/dist/executable.exe';
+const executablePath = '../python/dist/executable';
 
 async function process(data) {
     return new Promise((resolve, reject) => {
@@ -43,6 +43,9 @@ async function main() {
     try {
         const complete_image_base64 = await pathToImageBase64('../puzzle_complete.jpg');
         const piece_image_base64 = await pathToImageBase64('../puzzle_pieces_1.jpg');
+
+        console.log('Complete image:', complete_image_base64.slice(0, 100));
+        console.log('Piece image:', piece_image_base64.slice(0, 100));
 
         const result = await process({
           complete_image_base64: complete_image_base64,
