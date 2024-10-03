@@ -8,19 +8,6 @@ import {ResponseBase} from "@/app/api/responseMethod";
 import {ApiSolvePost, SolveItem} from "@/app/api/solve/route";
 import {ProjectItem} from "@/app/api/project/route";
 
-const files = [
-    {
-        id: "image01",
-        time: new Date(1727583185078),
-        source: 'https://en.pimg.jp/011/226/869/1/11226869.jpg',
-    },
-    {
-        id: "image02",
-        time: new Date(1727582185000),
-        source: 'https://img.gogoshop.cloud/598e6646/0REBYaSbgKZ.jpg',
-    },
-];
-
 export default function Page({params}: { params: { projectId: string } }) {
     const {projectId} = params;
     const [projectDoc, setProjectDoc] = useState<{
@@ -66,10 +53,6 @@ export default function Page({params}: { params: { projectId: string } }) {
         setLoading(false);
     }
 
-    function handleHistoryClick() {
-
-    }
-
     return (
         <div className="py-12 sm:py-16 lg:pb-40">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -79,31 +62,33 @@ export default function Page({params}: { params: { projectId: string } }) {
                     </h1>
                 </div>
                 <div className="mt-8 flow-root sm:mt-12">
-                    <div
-                        className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-2">
-
-                        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                    <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-2">
+                        <div className="mx-auto mb-8 max-w-7xl sm:px-6 lg:px-8">
                             <CenterText text={"尋找拼圖位置"}/>
                             <div className="overflow-hidden rounded-lg bg-white shadow">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-6">
-                                    <div>
+                                    <div className="flex flex-col">
                                         <ImageHeaderText text={"參考完整拼圖"}/>
-                                        <ImageViewer id="completeImage" src={projectDoc.imageUrl}/>
+                                        <div className="flex-grow">
+                                            <ImageViewer id="completeImage" src={projectDoc.imageUrl}/>
+                                        </div>
                                     </div>
-                                    <div>
+                                    <div className="flex flex-col">
                                         <ImageHeaderText text={"上傳部分拼圖"}/>
-                                        <UploadPicture selectedImage={selectedImage}
-                                                       setSelectedImage={setSelectedImage}/>
+                                        <div className="flex-grow">
+                                            <UploadPicture selectedImage={selectedImage}
+                                                           setSelectedImage={setSelectedImage}/>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="mt-4 flex justify-center">
                                     <button
                                         type="button"
                                         className={`rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm
-                                                    ${selectedImage === null ? "bg-gray-500" : "bg-indigo-600 hover:bg-indigo-500"} 
+                                                    ${(selectedImage === null || loading) ? "bg-gray-500" : "bg-indigo-600 hover:bg-indigo-500"} 
                                                     focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
                                         onClick={handleResultImages}
-                                        disabled={selectedImage === null}
+                                        disabled={selectedImage === null || loading}
                                     >
                                         {loading && <LoadingSpinner/>}
                                         開始尋找
@@ -111,28 +96,6 @@ export default function Page({params}: { params: { projectId: string } }) {
                                 </div>
                                 <SearchResult resultImages={resultImages}/>
                             </div>
-
-                            <CenterText text={"過去尋找記錄"}/>
-                            <div className="overflow-hidden rounded-lg bg-white shadow mb-4">
-                                <div className="px-4 py-5 sm:p-6">
-                                    <ul role="list"
-                                        className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-                                        {files.map((file, index) => (
-                                            <li key={index}>
-                                                <a href={`#${index}`} onClick={() => handleHistoryClick()}>
-                                                    <div
-                                                        className="group aspect-h-7 aspect-w-10 overflow-hidden rounded-lg bg-gray-100">
-                                                        <img src={file.source}
-                                                             className="object-cover group-hover:opacity-75"/>
-                                                    </div>
-                                                    <p className="mt-2 block truncate text-sm font-medium text-gray-900">{file.time.toLocaleString()}</p>
-                                                </a>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -171,6 +134,7 @@ function UploadPicture({selectedImage, setSelectedImage}: {
                 type="file"
                 accept="image/*"
                 className="hidden"
+                capture="environment"
                 onChange={onSelectedImage}
             />
         </div>

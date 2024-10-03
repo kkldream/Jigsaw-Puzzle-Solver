@@ -29,7 +29,7 @@ export default function NewProjectModel(props: {
             }),
         })).json() as ResponseBase<ApiProjectPost>;
         if (res.success) {
-            await router.push(`/project/${res.result.projectId}`);
+            router.push(`/project/${res.result.projectId}`);
         }
         clickCancel();
     }
