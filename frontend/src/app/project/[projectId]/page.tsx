@@ -5,8 +5,8 @@ import {useEffect, useState} from "react";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
 import SimpleGallery from "@/app/_components/Photoswipe";
 import {ResponseBase} from "@/app/api/responseMethod";
-import {ApiProjectIdGet} from "@/app/api/project/[projectId]/route";
 import {ApiSolvePost, SolveItem} from "@/app/api/solve/route";
+import {ProjectItem} from "@/app/api/project/route";
 
 const files = [
     {
@@ -34,7 +34,7 @@ export default function Page({params}: { params: { projectId: string } }) {
     useEffect(() => {
         fetch(`/api/project/${projectId}`)
             .then(response => response.json())
-            .then((data: ResponseBase<ApiProjectIdGet>) => {
+            .then((data: ResponseBase<ProjectItem>) => {
                 setProjectDoc({
                     name: data.result.name,
                     imageUrl: data.result.imageUrl,
@@ -75,7 +75,7 @@ export default function Page({params}: { params: { projectId: string } }) {
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="mx-auto max-w-2xl text-center">
                     <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-                        Project {projectDoc.name}
+                        {projectDoc.name || "載入中..."}
                     </h1>
                 </div>
                 <div className="mt-8 flow-root sm:mt-12">

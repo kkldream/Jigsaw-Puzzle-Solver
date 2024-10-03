@@ -1,6 +1,9 @@
 import {spawn} from 'child_process';
+import path, {dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
 
-const executablePath = 'C:\\GitHub\\Jigsaw-Puzzle-Solver\\frontend\\public\\executable.exe';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const executablePath = path.join(__dirname, 'solverExec', process.platform === 'win32' ? 'executable.exe' : 'executable');
 
 export interface SolverInput {
     complete_image_base64: string;
@@ -13,6 +16,7 @@ export interface SolverOutputItem {
 }
 
 export async function solver(data: SolverInput): Promise<SolverOutputItem[]> {
+    console.log('executablePath', executablePath);
     return new Promise((resolve, reject) => {
 
         const process = spawn(executablePath);
@@ -36,7 +40,7 @@ export async function solver(data: SolverInput): Promise<SolverOutputItem[]> {
             try {
                 const result = JSON.parse(outputData);
                 resolve(result);
-            } catch (e) {
+            } catch {
                 reject(new Error('Failed to parse output'));
             }
         });

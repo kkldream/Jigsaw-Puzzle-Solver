@@ -59,11 +59,11 @@ def solver(complete_image_base64, piece_image_base64):
 
     return [
         {
-            "name": "matched_piece_image",
-            "base64": image_to_base64(matched_piece_image)
+            "name": "特徵分佈圖",
+            "base64": image_to_base64(final_complete_image)
         },
         {
-            "name": "final_complete_image",
-            "base64": image_to_base64(final_complete_image)
+            "name": "特徵匹配圖",
+            "base64": image_to_base64(matched_piece_image)
         }
     ]
