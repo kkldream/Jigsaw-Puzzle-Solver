@@ -1,6 +1,6 @@
 import {ResponseFail, ResponseSuccess} from "@/app/api/responseMethod";
-import db from "@/lib/db";
-import aws from "@/lib/aws";
+import db from "@/service/dbService";
+import aws from "@/service/awsService";
 import {getFileTypeAndExtension} from "@/service/fileService";
 
 export interface ProjectItem {

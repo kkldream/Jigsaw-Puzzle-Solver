@@ -1,6 +1,6 @@
 import {ResponseFail, ResponseSuccess} from "@/app/api/responseMethod";
-import db from "@/lib/db";
-import {solver, SolverInput, SolverOutputItem} from "@/lib/solver";
+import db from "@/service/dbService";
+import {solver, SolverInput, SolverOutputItem} from "@/service/solverService";
 
 export interface SolveItem {
     name: string;

@@ -1,5 +1,5 @@
 import {ResponseFail, ResponseSuccess} from "@/app/api/responseMethod";
-import db from "@/lib/db";
+import db from "@/service/dbService";
 
 export interface ApiRootGet {
     dbStatus: string;

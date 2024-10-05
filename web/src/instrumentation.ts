@@ -1,5 +1,5 @@
-import db from "@/lib/db";
-import aws from "@/lib/aws";
+import db from "@/service/dbService";
+import aws from "@/service/awsService";
 
 // 專案啟動時執行，但熱重啟(有程式更動)不會執行
 export async function register() {
