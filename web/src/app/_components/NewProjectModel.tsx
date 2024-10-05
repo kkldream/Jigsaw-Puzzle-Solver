@@ -1,6 +1,6 @@
 import {ChangeEvent, Fragment, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
-import {fileToBase64Url} from "@/service/imageService";
+import {imageFileToBase64Url} from "@/service/imageService";
 import {useRouter} from 'next/navigation'
 import {ImageViewer} from "@/app/_components/ImageViewer";
 import api from "@/service/apiService";
@@ -22,7 +22,7 @@ export default function NewProjectModel(props: {
     async function handleButtonClick(isOk: boolean) {
         if (isOk) {
             if (!imageFile || projectName === "") throw new Error("Invalid input");
-            const res = await api.project.POST(projectName, await fileToBase64Url(imageFile));
+            const res = await api.project.POST(projectName, await imageFileToBase64Url(imageFile));
             if (res.success) {
                 router.push(`/project/${res.result.projectId}`);
             }

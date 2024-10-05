@@ -1,4 +1,4 @@
-export function fileToBase64Url(file: File): Promise<string> {
+export function imageFileToBase64Url(file: File): Promise<string> {
     return new Promise<string>((resolve) => {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result as string);
@@ -6,7 +6,7 @@ export function fileToBase64Url(file: File): Promise<string> {
     });
 }
 
-export async function getBase64FromUrl(url: string): Promise<string> {
+export async function imageUrlToBase64(url: string): Promise<string> {
     const response = await fetch(url);
     const buffer = await response.arrayBuffer();
     return Buffer.from(buffer).toString('base64');
@@ -27,4 +27,20 @@ export function base64UrlToFileTypeAndExtension(base64Url: string) {
     } else {
         throw new Error("Invalid Base64 string format");
     }
+}
+
+export function base64ToBase64Url(base64: string) {
+    let format = '';
+    if (base64.startsWith('/9j')) {
+        format = 'jpeg';
+    } else if (base64.startsWith('iVBORw0KGgo')) {
+        format = 'png';
+    } else if (base64.startsWith('R0lGODdh') || base64.startsWith('R0lGODlh')) {
+        format = 'gif';
+    } else if (base64.startsWith('UklGR')) {
+        format = 'webp';
+    } else {
+        throw new Error('未知的圖片格式');
+    }
+    return `data:image/${format};base64,${base64}`;
 }

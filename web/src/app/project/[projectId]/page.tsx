@@ -3,9 +3,9 @@
 import SearchResult from "@/app/project/[projectId]/_components/SearchResult";
 import {ChangeEvent, useEffect, useState} from "react";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
-import {SolveItem} from "@/app/api/solve/route";
 import {ImageViewer} from "@/app/_components/ImageViewer";
 import api from "@/service/apiService";
+import {base64ToBase64Url} from "@/service/imageService";
 
 export default function Page({params}: { params: { projectId: string } }) {
     const {projectId} = params;
@@ -14,7 +14,7 @@ export default function Page({params}: { params: { projectId: string } }) {
         imageUrl: string;
     }>({name: "", imageUrl: ""});
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const [resultImages, setResultImages] = useState<SolveItem[]>([]);
+    const [resultImages, setResultImages] = useState<{ name: string; base64Url: string; }[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -36,8 +36,10 @@ export default function Page({params}: { params: { projectId: string } }) {
             reader.readAsDataURL(blob);
         });
         const res = await api.solve.POST(projectId, selectedImageBase64);
-        console.log(res);
-        setResultImages(res.result.solves);
+        setResultImages(res.result.solves.map(item => ({
+            name: item.name,
+            base64Url: base64ToBase64Url(item.base64),
+        })));
         setLoading(false);
     }
 
