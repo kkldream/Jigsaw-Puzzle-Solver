@@ -1,6 +1,6 @@
 import {ChangeEvent, Fragment, useRef, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
-import {toBase64} from "@/service/fileService";
+import {toBase64} from "@/service/imageService";
 import {useRouter} from 'next/navigation'
 import {ImageViewer} from "@/app/_components/ImageViewer";
 import api from "@/service/apiService";

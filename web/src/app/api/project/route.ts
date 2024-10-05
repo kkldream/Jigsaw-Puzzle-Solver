@@ -1,7 +1,7 @@
 import {ResponseFail, ResponseSuccess} from "@/app/api/responseMethod";
 import db from "@/service/dbService";
 import aws from "@/service/awsService";
-import {getFileTypeAndExtension} from "@/service/fileService";
+import {getFileTypeAndExtension} from "@/service/imageService";
 
 export interface ProjectItem {
     id: string;

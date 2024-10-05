@@ -1,6 +1,7 @@
 import {ResponseFail, ResponseSuccess} from "@/app/api/responseMethod";
 import db from "@/service/dbService";
 import {solver, SolverInput, SolverOutputItem} from "@/service/solverService";
+import {getBase64FromUrl} from "@/service/imageService";
 
 export interface SolveItem {
     name: string;
@@ -49,8 +50,4 @@ export async function POST(request: Request) {
     }
 }
 
-async function getBase64FromUrl(url: string): Promise<string> {
-    const response = await fetch(url);
-    const buffer = await response.arrayBuffer();
-    return Buffer.from(buffer).toString('base64');
-}
+

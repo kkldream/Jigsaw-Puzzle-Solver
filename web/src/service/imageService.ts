@@ -6,6 +6,12 @@ export function toBase64(file: File): Promise<string> {
     });
 }
 
+export async function getBase64FromUrl(url: string): Promise<string> {
+    const response = await fetch(url);
+    const buffer = await response.arrayBuffer();
+    return Buffer.from(buffer).toString('base64');
+}
+
 export function getFileTypeAndExtension(base64: string) {
     // 檢查字串格式是否符合Base64 data URI
     const match = base64.match(/^data:(image\/\w+);base64,/);
