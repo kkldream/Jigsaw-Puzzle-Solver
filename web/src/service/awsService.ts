@@ -1,15 +1,27 @@
 import {PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
 import {Buffer} from 'buffer';
 
+const s3AccessKeyId = process.env.AWS_ACCESS_KEY_ID;
+const s3SecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+const s3Region = process.env.AWS_REGION;
 const bucketName = "julo-server"
 
-class AwsClient {
-    private client?: S3Client;
-    private region: string = "";
-    s3 = {
+function awsClient() {
+    if (!s3AccessKeyId || !s3SecretAccessKey || !s3Region) throw new Error('Missing AWS credentials');
+    return new S3Client({
+        credentials: {
+            accessKeyId: s3AccessKeyId,
+            secretAccessKey: s3SecretAccessKey,
+        },
+        region: s3Region,
+    });
+}
+
+const aws = {
+    s3: {
         uploadImage: async (base64: string, key: string, type: string): Promise<string> => {
-            if (!this.client) throw new Error('S3 client not initialized');
-            const result = await this.client.send(new PutObjectCommand({
+            const client = awsClient();
+            const result = await client.send(new PutObjectCommand({
                 Bucket: bucketName,
                 Key: key,
                 Body: Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64'),
@@ -19,22 +31,9 @@ class AwsClient {
             }));
             if (result.$metadata.httpStatusCode !== 200)
                 throw new Error('Failed to upload file to S3');
-            return `https://${bucketName}.s3.${this.region}.amazonaws.com/${key}`
-        }
-    }
-
-    init(accessKeyId: string, secretAccessKey: string, region: string) {
-        this.region = region;
-        this.client = new S3Client({
-            credentials: {
-                accessKeyId: accessKeyId,
-                secretAccessKey: secretAccessKey,
-            },
-            region: region,
-        });
-    }
-}
-
-const aws = new AwsClient();
+            return `https://${bucketName}.s3.${s3Region}.amazonaws.com/${key}`
+        },
+    },
+};
 
 export default aws;
