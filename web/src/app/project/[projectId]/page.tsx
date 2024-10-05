@@ -89,7 +89,7 @@ export default function Page({params}: { params: { projectId: string } }) {
                                                     ${(selectedImage === null || loading) ? "bg-gray-500" : "bg-indigo-600 hover:bg-indigo-500"} 
                                                     focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
                                         onClick={handleResultImages}
-                                        // disabled={selectedImage === null || loading}
+                                        disabled={selectedImage === null || loading}
                                     >
                                         {loading && <LoadingSpinner/>}
                                         開始尋找
