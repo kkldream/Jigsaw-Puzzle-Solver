@@ -1,9 +1,8 @@
-import {ImageHeaderText} from "@/app/project/[projectId]/page";
 import {useState} from "react";
 import {SolveItem} from "@/app/api/solve/route";
 import {ImageViewer} from "@/app/_components/ImageViewer";
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
@@ -22,10 +21,14 @@ export default function SearchResult({resultImages}: { resultImages: SolveItem[]
     return resultImages.length === 0 ? <div className="pb-4"></div> : (
         <div>
             <div className="px-6 pb-4">
-                <ImageHeaderText text={`結果${resultImages[currentTab].name}`}/>
+                <div className="mt-4 mb-2 mx-auto max-w-2xl text-center">
+                    <p className={`text-2xl sm:text-base font-bold tracking-tight text-gray-900`}>
+                        {`結果${resultImages[currentTab].name}`}
+                    </p>
+                </div>
                 <div className="flex justify-center">
                     <div className="w-11/12">
-                        <ImageViewer id="resultImages" src={resultImages[currentTab].base64}/>
+                        <ImageViewer src={resultImages[currentTab].base64} alt=""/>
                         <div className={(resultImages.length <= 1 ? "hidden" : "mt-2")}>
                             <div className="sm:hidden">
                                 <label htmlFor="tabs" className="sr-only">

@@ -5,7 +5,7 @@ import {Gallery, Item} from 'react-photoswipe-gallery'
 import {useEffect, useState} from "react";
 import Link from "next/link";
 
-export function ImageViewer(props: { id: string; src: string; alt: string; href?: string; }) {
+export function ImageViewer(props: { src: string; alt: string; href?: string; }) {
     const [imageSize, setImageSize] = useState<{ width: number; height: number; } | null>(null);
 
     useEffect(() => {

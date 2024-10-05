@@ -1,0 +1,17 @@
+# python
+/python/.venv
+/python/.vscode
+/python/build
+/python/dist
+/python/*.spec
+
+# web
+/web/.next
+/web/node_modules
+/web/dist
+/web/.env*
+/web/.idea
+
+# other
+/images
+/solver

@@ -1,9 +1,9 @@
 import {spawn} from 'child_process';
-import path, {dirname} from 'node:path';
-import {fileURLToPath} from 'node:url';
+import path from 'node:path';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const executablePath = path.join(__dirname, 'solverExec', process.platform === 'win32' ? 'executable.exe' : 'executable');
+const winExecutablePath = path.join(process.cwd(), "dist", 'executable.exe');
+const linuxExecutablePath = "/app/dist/executable";
+const executablePath = process.platform === 'win32' ? winExecutablePath : linuxExecutablePath;
 
 export interface SolverInput {
     complete_image_base64: string;

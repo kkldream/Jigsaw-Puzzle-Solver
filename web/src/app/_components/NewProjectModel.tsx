@@ -1,4 +1,4 @@
-import {Fragment, useRef, useState} from 'react'
+import {ChangeEvent, Fragment, useRef, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
 import {toBase64} from "@/service/fileService";
 import {useRouter} from 'next/navigation'
@@ -144,7 +144,7 @@ function UploadPicture(props: {
     setSelectedImage: (value: (((prevState: (string | null)) => (string | null)) | string | null)) => void;
     setImageFile: (value: (((prevState: (File | null)) => (File | null)) | File | null)) => void;
 }) {
-    const onSelectedImage = (e) => {
+    const onSelectedImage = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             props.setImageFile(e.target.files[0]);
             props.setSelectedImage(URL.createObjectURL(e.target.files[0]));
@@ -156,7 +156,7 @@ function UploadPicture(props: {
                 htmlFor="file-upload"
                 className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer"
             >
-                {props.selectedImage ? <ImageViewer id="UploadPicture" src={props.selectedImage}/> : (
+                {props.selectedImage ? <ImageViewer src={props.selectedImage} alt=""/> : (
                     <div>
                         <span className="m-8 block text-sm font-semibold text-gray-900">上傳完整拼圖</span>
                     </div>

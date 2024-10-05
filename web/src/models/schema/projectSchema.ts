@@ -1,6 +1,7 @@
-import {Document, Schema} from "mongoose";
+import {Document, Schema, Types} from "mongoose";
 
 export interface ProjectDocument extends Document {
+    _id: Types.ObjectId;
     isDeleted: boolean;
     name: string;
     imageUrl: string;

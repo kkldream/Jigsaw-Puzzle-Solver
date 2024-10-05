@@ -19,15 +19,16 @@ export function ResponseSuccess<T = null>(result: T) {
     return Response.json(res);
 }
 
-export function ResponseFail(err: Error) {
+export function ResponseFail(err: Error | string | unknown) {
+    const error: Error = err instanceof Error ? err : typeof err === "string" ? new Error(err) : new Error("Unknown error");
     const res: ResponseBase<null> = {
         time: new Date(),
         success: false,
         result: null,
         error: {
-            name: err.name,
-            message: err.message,
-            stack: err.stack || "",
+            name: error.name,
+            message: error.message,
+            stack: error.stack || "",
         },
     };
     return Response.json(res);

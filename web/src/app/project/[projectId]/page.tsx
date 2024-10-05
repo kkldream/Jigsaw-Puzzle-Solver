@@ -1,7 +1,7 @@
 "use client";
 
 import SearchResult from "@/app/project/[projectId]/_components/SearchResult";
-import {useEffect, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
 import {ResponseBase} from "@/app/api/responseMethod";
 import {ApiSolvePost, SolveItem} from "@/app/api/solve/route";
@@ -69,13 +69,13 @@ export default function Page({params}: { params: { projectId: string } }) {
                             <div className="overflow-hidden rounded-lg bg-white shadow">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-6">
                                     <div className="flex flex-col">
-                                        <ImageHeaderText text={"參考完整拼圖"}/>
+                                        <ImageHeaderTextAsd text={"參考完整拼圖"}/>
                                         <div className="flex-grow">
-                                            <ImageViewer id="completeImage" src={projectDoc.imageUrl}/>
+                                            <ImageViewer src={projectDoc.imageUrl} alt=""/>
                                         </div>
                                     </div>
                                     <div className="flex flex-col">
-                                        <ImageHeaderText text={"上傳部分拼圖"}/>
+                                        <ImageHeaderTextAsd text={"上傳部分拼圖"}/>
                                         <div className="flex-grow">
                                             <UploadPicture selectedImage={selectedImage}
                                                            setSelectedImage={setSelectedImage}/>
@@ -89,7 +89,7 @@ export default function Page({params}: { params: { projectId: string } }) {
                                                     ${(selectedImage === null || loading) ? "bg-gray-500" : "bg-indigo-600 hover:bg-indigo-500"} 
                                                     focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
                                         onClick={handleResultImages}
-                                        disabled={selectedImage === null || loading}
+                                        // disabled={selectedImage === null || loading}
                                     >
                                         {loading && <LoadingSpinner/>}
                                         開始尋找
@@ -109,7 +109,7 @@ function UploadPicture({selectedImage, setSelectedImage}: {
     selectedImage: string | null;
     setSelectedImage: (value: (((prevState: (string | null)) => (string | null)) | string | null)) => void;
 }) {
-    const onSelectedImage = (e) => {
+    const onSelectedImage = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setSelectedImage(URL.createObjectURL(e.target.files[0]));
         }
@@ -152,7 +152,7 @@ function CenterText(props: { text: string; }) {
     );
 }
 
-export function ImageHeaderText(props: { text: string; }) {
+function ImageHeaderTextAsd(props: { text: string; }) {
     return (
         <div className="mt-4 mb-2 mx-auto max-w-2xl text-center">
             <p className={`text-2xl sm:text-base font-bold tracking-tight text-gray-900`}>
