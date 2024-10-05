@@ -1,9 +1,10 @@
-import {ChangeEvent, Fragment, useState} from 'react'
+import {ChangeEvent, Fragment, useMemo, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
 import {imageFileToBase64Url} from "@/service/imageService";
 import {useRouter} from 'next/navigation'
 import {ImageViewer} from "@/app/_components/ImageViewer";
 import api from "@/service/apiService";
+import LoadingSpinner from "@/app/_components/LoadingSpinner";
 
 export default function NewProjectModel(props: {
     open: boolean;
@@ -12,24 +13,28 @@ export default function NewProjectModel(props: {
     const router = useRouter();
     const [projectName, setProjectName] = useState<string>("");
     const [imageFile, setImageFile] = useState<File | null>(null);
+    const [uploadLoading, setUploadLoading] = useState<boolean>(false);
+    const checkCanUpload = useMemo(() => projectName !== "" && imageFile !== null, [projectName, imageFile]);
 
     function handleInputFile(e: ChangeEvent<HTMLInputElement>) {
-        if (e.target.files && e.target.files[0]) {
+        if (e.target.files && e.target.files[0])
             setImageFile(e.target.files[0]);
-        }
     }
 
     async function handleButtonClick(isOk: boolean) {
+        setUploadLoading(true);
         if (isOk) {
-            if (!imageFile || projectName === "") throw new Error("Invalid input");
-            const res = await api.project.POST(projectName, await imageFileToBase64Url(imageFile));
+            if (!checkCanUpload) throw new Error("Invalid input");
+            const res = await api.project.POST(projectName, await imageFileToBase64Url(imageFile as File));
             if (res.success) {
                 router.push(`/project/${res.result.projectId}`);
+                return;
             }
         }
         props.setOpen(false);
         setProjectName("");
         setImageFile(null);
+        setUploadLoading(false);
     }
 
     return (
@@ -120,15 +125,20 @@ export default function NewProjectModel(props: {
                                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                                     <button
                                         type="button"
-                                        className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+                                        className={`inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2
+                                                    ${(!checkCanUpload || uploadLoading) ? "bg-gray-500" : "bg-indigo-600 hover:bg-indigo-500"}`}
                                         onClick={() => handleButtonClick(true)}
+                                        disabled={!checkCanUpload || uploadLoading}
                                     >
+                                        {uploadLoading && <LoadingSpinner/>}
                                         確定
                                     </button>
                                     <button
                                         type="button"
-                                        className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+                                        className={`mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:col-start-1 sm:mt-0
+                                                    ${uploadLoading ? "" : "hover:bg-gray-50"}`}
                                         onClick={() => handleButtonClick(false)}
+                                        disabled={uploadLoading}
                                     >
                                         取消
                                     </button>
