@@ -1,6 +1,6 @@
-import {ChangeEvent, Fragment, useRef, useState} from 'react'
+import {ChangeEvent, Fragment, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
-import {toBase64} from "@/service/imageService";
+import {fileToBase64Url} from "@/service/imageService";
 import {useRouter} from 'next/navigation'
 import {ImageViewer} from "@/app/_components/ImageViewer";
 import api from "@/service/apiService";
@@ -10,30 +10,31 @@ export default function NewProjectModel(props: {
     setOpen: (value: (((prevState: boolean) => boolean) | boolean)) => void;
 }) {
     const router = useRouter();
-    const cancelButtonRef = useRef(null);
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const [imageFile, setImageFile] = useState<File | null>(null);
     const [projectName, setProjectName] = useState<string>("");
+    const [imageFile, setImageFile] = useState<File | null>(null);
 
-    async function clickOk() {
-        if (!imageFile || projectName === "") throw new Error("Invalid input");
-        const res = await api.project.POST(projectName, await toBase64(imageFile));
-        if (res.success) {
-            router.push(`/project/${res.result.projectId}`);
+    function handleInputFile(e: ChangeEvent<HTMLInputElement>) {
+        if (e.target.files && e.target.files[0]) {
+            setImageFile(e.target.files[0]);
         }
-        clickCancel();
     }
 
-    function clickCancel() {
+    async function handleButtonClick(isOk: boolean) {
+        if (isOk) {
+            if (!imageFile || projectName === "") throw new Error("Invalid input");
+            const res = await api.project.POST(projectName, await fileToBase64Url(imageFile));
+            if (res.success) {
+                router.push(`/project/${res.result.projectId}`);
+            }
+        }
         props.setOpen(false);
         setProjectName("");
-        setSelectedImage(null);
         setImageFile(null);
     }
 
     return (
         <Transition.Root show={props.open} as={Fragment}>
-            <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={props.setOpen}>
+            <Dialog as="div" className="relative z-10" onClose={props.setOpen}>
                 <Transition.Child
                     as={Fragment}
                     enter="ease-out duration-300"
@@ -88,10 +89,23 @@ export default function NewProjectModel(props: {
                                             </p>
                                         </div>
                                         <div className="mt-3">
-                                            <div>
-                                                <UploadPicture selectedImage={selectedImage}
-                                                               setSelectedImage={setSelectedImage}
-                                                               setImageFile={setImageFile}/>
+                                            <div className="relative block w-full h-full">
+                                                <label
+                                                    htmlFor="file-upload"
+                                                    className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer"
+                                                >
+                                                    {imageFile ?
+                                                        <ImageViewer src={URL.createObjectURL(imageFile)} alt=""/>
+                                                        : <span
+                                                            className="m-8 block text-sm font-semibold text-gray-900">上傳完整拼圖</span>}
+                                                </label>
+                                                <input
+                                                    id="file-upload"
+                                                    type="file"
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                    onChange={handleInputFile}
+                                                />
                                             </div>
                                         </div>
                                         <div className="mt-2">
@@ -107,15 +121,14 @@ export default function NewProjectModel(props: {
                                     <button
                                         type="button"
                                         className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
-                                        onClick={clickOk}
+                                        onClick={() => handleButtonClick(true)}
                                     >
                                         確定
                                     </button>
                                     <button
                                         type="button"
                                         className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-                                        onClick={clickCancel}
-                                        ref={cancelButtonRef}
+                                        onClick={() => handleButtonClick(false)}
                                     >
                                         取消
                                     </button>
@@ -127,38 +140,4 @@ export default function NewProjectModel(props: {
             </Dialog>
         </Transition.Root>
     )
-}
-
-function UploadPicture(props: {
-    selectedImage: string | null;
-    setSelectedImage: (value: (((prevState: (string | null)) => (string | null)) | string | null)) => void;
-    setImageFile: (value: (((prevState: (File | null)) => (File | null)) | File | null)) => void;
-}) {
-    const onSelectedImage = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            props.setImageFile(e.target.files[0]);
-            props.setSelectedImage(URL.createObjectURL(e.target.files[0]));
-        }
-    };
-    return (
-        <div className="relative block w-full h-full">
-            <label
-                htmlFor="file-upload"
-                className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer"
-            >
-                {props.selectedImage ? <ImageViewer src={props.selectedImage} alt=""/> : (
-                    <div>
-                        <span className="m-8 block text-sm font-semibold text-gray-900">上傳完整拼圖</span>
-                    </div>
-                )}
-            </label>
-            <input
-                id="file-upload"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={onSelectedImage}
-            />
-        </div>
-    );
 }
