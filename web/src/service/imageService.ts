@@ -12,9 +12,9 @@ export async function getBase64FromUrl(url: string): Promise<string> {
     return Buffer.from(buffer).toString('base64');
 }
 
-export function getFileTypeAndExtension(base64: string) {
+export function base64UrlToFileTypeAndExtension(base64Url: string) {
     // 檢查字串格式是否符合Base64 data URI
-    const match = base64.match(/^data:(image\/\w+);base64,/);
+    const match = base64Url.match(/^data:(image\/\w+);base64,/);
 
     if (match) {
         const fileType = match[1]; // 例如 'image/png'

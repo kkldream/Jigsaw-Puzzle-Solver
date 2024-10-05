@@ -8,11 +8,11 @@ const api = {
             const res = await fetch(`/api/project?limit=${limit}`);
             return await res.json();
         },
-        POST: async (name: string, base64: string): Promise<ResponseBase<ApiProjectPost>> => {
+        POST: async (name: string, base64Url: string): Promise<ResponseBase<ApiProjectPost>> => {
             const res = await fetch('/api/project', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({name, base64}),
+                body: JSON.stringify({name, base64Url}),
             });
             return await res.json();
         },

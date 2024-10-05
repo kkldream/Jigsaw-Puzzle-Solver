@@ -1,7 +1,6 @@
 import {ResponseFail, ResponseSuccess} from "@/app/api/responseMethod";
 import db from "@/service/dbService";
 import aws from "@/service/awsService";
-import {getFileTypeAndExtension} from "@/service/imageService";
 
 export interface ProjectItem {
     id: string;
@@ -40,15 +39,12 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
     try {
-        const {name, base64} = await request.json();
-        const {fileType, extension} = getFileTypeAndExtension(base64);
-        const result = await aws.s3.uploadImage(base64, `prod/puzzle/${name}-${new Date().getTime()}.${extension}`, fileType);
+        const {name, base64Url} = await request.json();
+        const result = await aws.s3.uploadImage(base64Url, `prod/puzzle/${name}-${new Date().getTime()}`);
         const doc = await db.project.create({
             name: name,
             imageUrl: result,
         });
-        console.log(doc);
-
         return ResponseSuccess<ApiProjectPost>({
             projectId: doc._id.toString(),
         });
