@@ -3,10 +3,9 @@
 import SearchResult from "@/app/project/[projectId]/_components/SearchResult";
 import {ChangeEvent, useEffect, useState} from "react";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
-import {ResponseBase} from "@/app/api/responseMethod";
-import {ApiSolvePost, SolveItem} from "@/app/api/solve/route";
-import {ProjectItem} from "@/app/api/project/route";
+import {SolveItem} from "@/app/api/solve/route";
 import {ImageViewer} from "@/app/_components/ImageViewer";
+import api from "@/service/apiService";
 
 export default function Page({params}: { params: { projectId: string } }) {
     const {projectId} = params;
@@ -19,14 +18,12 @@ export default function Page({params}: { params: { projectId: string } }) {
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        fetch(`/api/project/${projectId}`)
-            .then(response => response.json())
-            .then((data: ResponseBase<ProjectItem>) => {
-                setProjectDoc({
-                    name: data.result.name,
-                    imageUrl: data.result.imageUrl,
-                });
+        api.project.projectId.GET(projectId).then((data) => {
+            setProjectDoc({
+                name: data.result.name,
+                imageUrl: data.result.imageUrl,
             });
+        });
     }, [projectId]);
 
     async function handleResultImages() {
@@ -38,16 +35,7 @@ export default function Page({params}: { params: { projectId: string } }) {
             reader.onload = () => resolve((reader.result as string).split(',')[1]);
             reader.readAsDataURL(blob);
         });
-        const res = await (await fetch(`/api/solve`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                projectId: projectId,
-                base64: selectedImageBase64,
-            }),
-        })).json() as ResponseBase<ApiSolvePost>;
+        const res = await api.solve.POST(projectId, selectedImageBase64);
         console.log(res);
         setResultImages(res.result.solves);
         setLoading(false);

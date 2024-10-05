@@ -1,19 +1,17 @@
 "use client";
 
-import {ResponseBase} from "@/app/api/responseMethod";
-import {ApiProjectGet, ProjectItem} from "@/app/api/project/route";
+import {ProjectItem} from "@/app/api/project/route";
 import {useEffect, useState} from "react";
 import {ImageViewer} from "@/app/_components/ImageViewer";
+import api from "@/service/apiService";
 
 export default function ProjectMenu(props: { max?: number }) {
     const [projects, setProjects] = useState<ProjectItem[] | null>(null);
 
     useEffect(() => {
-        fetch(`/api/project${props.max ? `?limit=${props.max}` : ""}`)
-            .then(response => response.json())
-            .then((data: ResponseBase<ApiProjectGet>) => {
-                setProjects(data.result.projects);
-            });
+        api.project.GET(props.max).then((data) => {
+            setProjects(data.result.projects);
+        });
     }, [props.max]);
 
     return projects ? (

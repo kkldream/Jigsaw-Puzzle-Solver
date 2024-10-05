@@ -2,9 +2,8 @@ import {ChangeEvent, Fragment, useRef, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
 import {toBase64} from "@/service/fileService";
 import {useRouter} from 'next/navigation'
-import {ResponseBase} from "@/app/api/responseMethod";
-import {ApiProjectPost} from "@/app/api/project/route";
 import {ImageViewer} from "@/app/_components/ImageViewer";
+import api from "@/service/apiService";
 
 export default function NewProjectModel(props: {
     open: boolean;
@@ -18,16 +17,7 @@ export default function NewProjectModel(props: {
 
     async function clickOk() {
         if (!imageFile || projectName === "") throw new Error("Invalid input");
-        const res = await (await fetch('/api/project', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: projectName,
-                base64: await toBase64(imageFile),
-            }),
-        })).json() as ResponseBase<ApiProjectPost>;
+        const res = await api.project.POST(projectName, await toBase64(imageFile));
         if (res.success) {
             router.push(`/project/${res.result.projectId}`);
         }
