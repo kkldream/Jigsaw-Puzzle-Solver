@@ -6,18 +6,6 @@ const bucketName = "julo-server"
 class AwsClient {
     private client?: S3Client;
     private region: string = "";
-
-    init(accessKeyId: string, secretAccessKey: string, region: string) {
-        this.region = region;
-        this.client = new S3Client({
-            credentials: {
-                accessKeyId: accessKeyId,
-                secretAccessKey: secretAccessKey,
-            },
-            region: region,
-        });
-    }
-
     s3 = {
         uploadImage: async (base64: string, key: string, type: string): Promise<string> => {
             if (!this.client) throw new Error('S3 client not initialized');
@@ -33,6 +21,17 @@ class AwsClient {
                 throw new Error('Failed to upload file to S3');
             return `https://${bucketName}.s3.${this.region}.amazonaws.com/${key}`
         }
+    }
+
+    init(accessKeyId: string, secretAccessKey: string, region: string) {
+        this.region = region;
+        this.client = new S3Client({
+            credentials: {
+                accessKeyId: accessKeyId,
+                secretAccessKey: secretAccessKey,
+            },
+            region: region,
+        });
     }
 }
 
