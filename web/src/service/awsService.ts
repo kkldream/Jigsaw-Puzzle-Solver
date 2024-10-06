@@ -1,6 +1,6 @@
 import {PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
 import {Buffer} from 'buffer';
-import {base64UrlToFileTypeAndExtension} from "@/service/imageService";
+import {base64UrlToFileTypeAndExtension} from "@/service/base64Service";
 
 const s3AccessKeyId = process.env.AWS_ACCESS_KEY_ID;
 const s3SecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;

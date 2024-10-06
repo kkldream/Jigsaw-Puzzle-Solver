@@ -1,7 +1,7 @@
 import {ResponseFail, ResponseSuccess} from "@/app/api/responseMethod";
 import db from "@/service/dbService";
 import {solver, SolverInput} from "@/service/solverService";
-import {imageUrlToBase64} from "@/service/imageService";
+import {imageUrlToBase64} from "@/service/base64Service";
 
 export interface SolveItem {
     name: string;
