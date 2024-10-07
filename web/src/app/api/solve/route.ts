@@ -14,7 +14,18 @@ export interface ApiSolvePost {
 
 export async function POST(request: Request) {
     try {
-        const {projectId, base64} = await request.json();
+        const {token, projectId, base64} = await request.json();
+
+        // Verify user
+        const res = await fetch("https://account.julojulo.club/api/third/verify/user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "authToken": token,
+            },
+        });
+        if (!res.ok) return ResponseFail(new Error("Failed to verify user"));
+
         await new Promise((resolve) => setTimeout(resolve, 1000));
         const projectDoc = await db.project.findById(projectId).exec();
         if (!projectDoc) return ResponseFail(new Error("projectDoc is null"));

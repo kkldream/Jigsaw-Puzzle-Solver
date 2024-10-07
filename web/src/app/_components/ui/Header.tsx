@@ -5,6 +5,7 @@ import {Dialog} from "@headlessui/react";
 import {useState} from "react";
 import Link from "next/link";
 import LoginModel from "@/app/_components/ui/LoginModel";
+import {useUserStore} from "@/stores/useUserStore";
 
 const navigation = [
     {name: 'Home', href: '/'},
@@ -13,6 +14,7 @@ const navigation = [
 ];
 
 export default function Header() {
+    const userStore = useUserStore();
     const [loginModelShow, setLoginModelShow] = useState<boolean>(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     return (
@@ -48,10 +50,17 @@ export default function Header() {
                         ))}
                     </div>
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                        <button className="text-sm font-semibold leading-6 text-gray-900"
-                                onClick={() => setLoginModelShow(true)}>
-                            Log in <span aria-hidden="true">&rarr;</span>
-                        </button>
+                        {userStore.userId === "" ? (
+                            <button className="text-sm font-semibold leading-6 text-gray-900"
+                                    onClick={() => setLoginModelShow(true)}>
+                                Log in <span aria-hidden="true">&rarr;</span>
+                            </button>
+                        ) : (
+                            <button className="text-sm font-semibold leading-6 text-gray-900"
+                                    onClick={userStore.logout}>
+                                Log out <span aria-hidden="true">&rarr;</span>
+                            </button>
+                        )}
                     </div>
                 </nav>
                 <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>

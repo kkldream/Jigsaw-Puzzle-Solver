@@ -1,12 +1,16 @@
-import {Fragment, useEffect, useMemo, useState} from 'react'
+"use client";
+
+import {Fragment, useEffect, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
-import {useRouter} from 'next/navigation'
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
+import {useUserStore} from "@/stores/useUserStore";
+import api from "@/service/apiService";
 
 export default function LoginModel(props: {
     open: boolean;
     setOpen: (value: (((prevState: boolean) => boolean) | boolean)) => void;
 }) {
+    const userStore = useUserStore();
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
@@ -20,12 +24,26 @@ export default function LoginModel(props: {
 
     async function handleButtonClick(isOk: boolean) {
         setLoading(true);
-        if (isOk) {
-            if (!checkInputOk) throw new Error("Invalid input");
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+        if (!checkInputOk) throw new Error("Invalid input");
+        try {
+            if (isOk) {
+                const tokenRes = await api.account.token.GET();
+                console.log(tokenRes);
+                if (!tokenRes.success) throw new Error(tokenRes.error?.message);
+                const token = tokenRes.result.authToken;
+                const loginRes = await api.account.login.POST(token, username, password);
+                console.log("loginRes", loginRes);
+                if (!loginRes.success) {
+                    alert("帳號密碼錯誤！")
+                    throw new Error(loginRes.error?.message);
+                }
+                const userId = loginRes.result.userId;
+                userStore.login(userId, token);
+            }
+        } finally {
+            props.setOpen(false);
+            setLoading(false);
         }
-        props.setOpen(false);
-        setLoading(false);
     }
 
     return (
