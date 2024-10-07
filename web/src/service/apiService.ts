@@ -38,7 +38,9 @@ const api = {
     account: {
         token: {
             GET: async (): Promise<ResponseBase<ApiAccountTokenGet>> => {
-                const res = await fetch(`/api/account/token`);
+                const res = await fetch("/api/account/token", {
+                    cache: "no-store",
+                });
                 return await res.json();
             },
         },

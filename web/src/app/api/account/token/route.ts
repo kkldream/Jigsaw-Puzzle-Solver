@@ -6,7 +6,9 @@ export interface ApiAccountTokenGet {
 
 export async function GET() {
     try {
-        const res = await fetch("https://account.julojulo.club/api/account/token");
+        const res = await fetch("https://account.julojulo.club/api/account/token", {
+            cache: "no-store",
+        });
         if (!res.ok) return ResponseFail(new Error("Failed to get token"));
         const data = await res.json() as ApiAccountTokenGet;
         return ResponseSuccess<ApiAccountTokenGet>(data);

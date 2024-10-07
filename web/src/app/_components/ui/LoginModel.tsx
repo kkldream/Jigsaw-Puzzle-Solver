@@ -34,7 +34,8 @@ export default function LoginModel(props: {
                 const loginRes = await api.account.login.POST(token, username, password);
                 console.log("loginRes", loginRes);
                 if (!loginRes.success) {
-                    alert("帳號密碼錯誤！")
+                    userStore.logout();
+                    alert("帳號密碼錯誤！");
                     throw new Error(loginRes.error?.message);
                 }
                 const userId = loginRes.result.userId;
