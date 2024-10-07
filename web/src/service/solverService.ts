@@ -16,9 +16,7 @@ export interface SolverOutputItem {
 }
 
 export async function solver(data: SolverInput): Promise<SolverOutputItem[]> {
-    console.log('executablePath', executablePath);
     return new Promise((resolve, reject) => {
-
         const process = spawn(executablePath);
 
         let outputData = '';
