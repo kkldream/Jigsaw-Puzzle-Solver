@@ -5,7 +5,7 @@ import {Dialog} from "@headlessui/react";
 import {useState} from "react";
 import Link from "next/link";
 import LoginModel from "@/app/_components/ui/LoginModel";
-import {useUserStore} from "@/stores/useUserStore";
+import {useSyncUserFromCookies, useUserStore} from "@/stores/useUserStore";
 
 const navigation = [
     {name: 'Home', href: '/'},
@@ -14,6 +14,7 @@ const navigation = [
 ];
 
 export default function Header() {
+    useSyncUserFromCookies();
     const userStore = useUserStore();
     const [loginModelShow, setLoginModelShow] = useState<boolean>(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
