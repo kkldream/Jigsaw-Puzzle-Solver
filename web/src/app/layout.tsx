@@ -2,6 +2,7 @@ import type {Metadata} from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/app/_components/ui/Header";
+import {Suspense} from "react";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -39,8 +40,9 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
                         }}
                     />
                 </div>
-
-                {children}
+                <Suspense>
+                    {children}
+                </Suspense>
             </div>
         </div>
         </body>

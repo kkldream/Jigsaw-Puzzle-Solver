@@ -1,6 +1,7 @@
 import {ResponseFail, ResponseSuccess} from "@/app/api/responseMethod";
 import db from "@/service/dbService";
 import aws from "@/service/awsService";
+import {verifyUser} from "@/app/api/_services/verifyService";
 
 export interface ProjectItem {
     id: string;
@@ -40,17 +41,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
     try {
         const {token, name, base64Url} = await request.json();
-
-        // Verify user
-        const res = await fetch("https://account.julojulo.club/api/third/verify/user", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "authToken": token,
-            },
-        });
-        if (!res.ok) return ResponseFail(new Error("Failed to verify user"));
-
+        await verifyUser(token);
         const result = await aws.s3.uploadImage(base64Url, `puzzle/${name}-${new Date().getTime()}`);
         const doc = await db.project.create({
             name: name,
