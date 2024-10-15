@@ -6,6 +6,7 @@ export interface ApiAccountTokenGet {
 
 export async function GET() {
     try {
+        // TODO：來源因該改用 POST 方法
         const res = await fetch("https://account.julojulo.club/api/account/token", {
             cache: "no-store",
         });

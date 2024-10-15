@@ -5,7 +5,7 @@ import {base64UrlToFileTypeAndExtension} from "@/service/base64Service";
 const s3AccessKeyId = process.env.AWS_ACCESS_KEY_ID;
 const s3SecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
 const s3Region = process.env.AWS_REGION;
-const bucketName = "julo-server"
+const bucketName = "julo-server";
 
 function getAwsClient() {
     if (!s3AccessKeyId || !s3SecretAccessKey || !s3Region) throw new Error('Missing AWS credentials');
@@ -23,7 +23,6 @@ const aws = {
         uploadImage: async (base64Url: string, path: string): Promise<string> => {
             const client = getAwsClient();
             const {fileType, extension} = base64UrlToFileTypeAndExtension(base64Url);
-            // TODO：需要根據環境變數來設定 prod 或 dev
             const key = `prod/${path}.${extension}`;
             const result = await client.send(new PutObjectCommand({
                 Bucket: bucketName,
