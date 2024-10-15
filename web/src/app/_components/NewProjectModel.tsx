@@ -5,12 +5,14 @@ import {useRouter} from 'next/navigation'
 import {ImageViewer} from "@/app/_components/ImageViewer";
 import api from "@/service/apiService";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
+import {useUserStore} from "@/stores/useUserStore";
 
 export default function NewProjectModel(props: {
     open: boolean;
     setOpen: (value: (((prevState: boolean) => boolean) | boolean)) => void;
 }) {
     const router = useRouter();
+    const userToken = useUserStore(state => state.token);
     const [projectName, setProjectName] = useState<string>("");
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [uploadLoading, setUploadLoading] = useState<boolean>(false);
@@ -26,7 +28,7 @@ export default function NewProjectModel(props: {
         setUploadLoading(true);
         if (isOk) {
             if (!checkCanUpload) throw new Error("Invalid input");
-            const res = await api.project.POST(projectName, await imageFileToBase64Url(imageFile as File));
+            const res = await api.project.POST(userToken, projectName, await imageFileToBase64Url(imageFile as File));
             if (res.success) {
                 router.push(`/project/${res.result.projectId}`);
                 return;

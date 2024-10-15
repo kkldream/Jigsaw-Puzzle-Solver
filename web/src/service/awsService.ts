@@ -20,10 +20,11 @@ function getAwsClient() {
 
 const aws = {
     s3: {
-        uploadImage: async (base64Url: string, key: string, autoExtension: boolean = true): Promise<string> => {
+        uploadImage: async (base64Url: string, path: string): Promise<string> => {
             const client = getAwsClient();
             const {fileType, extension} = base64UrlToFileTypeAndExtension(base64Url);
-            if (autoExtension) key = `${key}.${extension}`;
+            // TODO：需要根據環境變數來設定 prod 或 dev
+            const key = `prod/${path}.${extension}`;
             const result = await client.send(new PutObjectCommand({
                 Bucket: bucketName,
                 Key: key,

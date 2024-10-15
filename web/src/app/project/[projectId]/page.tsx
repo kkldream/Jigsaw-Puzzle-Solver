@@ -64,10 +64,10 @@ export default function Page({params}: { params: { projectId: string } }) {
                                     <button
                                         type="button"
                                         className={`rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm
-                                                    ${(uploadImageFile === null || searchLoading) ? "bg-gray-500" : "bg-indigo-600 hover:bg-indigo-500"} 
+                                                    ${(uploadImageFile === null || searchLoading || !userStore.isLogin()) ? "bg-gray-500" : "bg-indigo-600 hover:bg-indigo-500"} 
                                                     focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
                                         onClick={handleSearch}
-                                        disabled={uploadImageFile === null || searchLoading}
+                                        disabled={uploadImageFile === null || searchLoading || !userStore.isLogin()}
                                     >
                                         {searchLoading && <LoadingSpinner/>}
                                         開始尋找

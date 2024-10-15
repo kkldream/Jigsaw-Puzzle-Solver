@@ -51,7 +51,7 @@ export async function POST(request: Request) {
         });
         if (!res.ok) return ResponseFail(new Error("Failed to verify user"));
 
-        const result = await aws.s3.uploadImage(base64Url, `prod/puzzle/${name}-${new Date().getTime()}`);
+        const result = await aws.s3.uploadImage(base64Url, `puzzle/${name}-${new Date().getTime()}`);
         const doc = await db.project.create({
             name: name,
             imageUrl: result,

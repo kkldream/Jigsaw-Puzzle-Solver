@@ -4,8 +4,8 @@ import {Bars3Icon, XMarkIcon} from "@heroicons/react/24/outline";
 import {Dialog} from "@headlessui/react";
 import {useState} from "react";
 import Link from "next/link";
-import LoginModel from "@/app/_components/ui/LoginModel";
 import {useSyncUserFromCookies, useUserStore} from "@/stores/useUserStore";
+import {usePathname, useRouter} from "next/navigation";
 
 const navigation = [
     {name: 'Home', href: '/'},
@@ -15,15 +15,26 @@ const navigation = [
 
 export default function Header() {
     useSyncUserFromCookies();
-    const userStore = useUserStore();
-    const [loginModelShow, setLoginModelShow] = useState<boolean>(false);
+
+    const router = useRouter();
+    const pathname = usePathname();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const userStore = useUserStore();
+
+    function login() {
+        router.push(`/login?from=${pathname}`);
+    }
+
+    function logout() {
+        userStore.logout();
+    }
+
     return (
         <>
             <header className="absolute inset-x-0 top-0 z-50">
                 <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
                     <div className="flex lg:flex-1">
-                        <Link href="#" className="-m-1.5 p-1.5">
+                        <Link href="/login" className="-m-1.5 p-1.5">
                             <span className="sr-only">Your Company</span>
                             <img
                                 className="h-8 w-auto"
@@ -51,17 +62,17 @@ export default function Header() {
                         ))}
                     </div>
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                        {userStore.userId === "" ? (
+                        {(pathname && pathname !== "/login") && (userStore.isLogin() ? (
                             <button className="text-sm font-semibold leading-6 text-gray-900"
-                                    onClick={() => setLoginModelShow(true)}>
-                                Log in <span aria-hidden="true">&rarr;</span>
+                                    onClick={logout}>
+                                Log out <span aria-hidden="true">&rarr;</span>
                             </button>
                         ) : (
                             <button className="text-sm font-semibold leading-6 text-gray-900"
-                                    onClick={userStore.logout}>
-                                Log out <span aria-hidden="true">&rarr;</span>
+                                    onClick={login}>
+                                Log in <span aria-hidden="true">&rarr;</span>
                             </button>
-                        )}
+                        ))}
                     </div>
                 </nav>
                 <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -100,19 +111,25 @@ export default function Header() {
                                     ))}
                                 </div>
                                 <div className="py-6">
-                                    <a
-                                        href="#"
-                                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                                    >
-                                        Log in
-                                    </a>
+                                    {pathname && (userStore.isLogin() ? (
+                                        <button
+                                            className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                                            onClick={logout}>
+                                            Log out
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                                            onClick={login}>
+                                            Log in
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
                         </div>
                     </Dialog.Panel>
                 </Dialog>
             </header>
-            <LoginModel open={loginModelShow} setOpen={setLoginModelShow}/>
         </>
     )
 }

@@ -3,8 +3,10 @@
 import ProjectMenu from "@/app/_components/ProjectMenu";
 import NewProjectModel from "@/app/_components/NewProjectModel";
 import {useState} from "react";
+import {useUserStore} from "@/stores/useUserStore";
 
 export default function Page() {
+    const userIsLogin = useUserStore(state => state.isLogin());
     const [modelShow, setModelShow] = useState<boolean>(false);
     return (
         <>
@@ -18,13 +20,15 @@ export default function Page() {
                             Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo.
                         </p>
                         <div className="mt-10 flex items-center justify-center gap-x-6">
-                            <a
-                                href="#"
-                                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            <button
+                                className={`rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm
+                                            ${!userIsLogin ? "bg-gray-500" : "bg-indigo-600 hover:bg-indigo-500"}
+                                            focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
                                 onClick={() => setModelShow(true)}
+                                disabled={!userIsLogin}
                             >
                                 New Project
-                            </a>
+                            </button>
                         </div>
                     </div>
                     <div className="mt-16 flow-root sm:mt-24">

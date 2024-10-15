@@ -10,11 +10,11 @@ const api = {
             const res = await fetch(`/api/project?limit=${limit}`);
             return await res.json();
         },
-        POST: async (name: string, base64Url: string): Promise<ResponseBase<ApiProjectPost>> => {
+        POST: async (token: string, name: string, base64Url: string): Promise<ResponseBase<ApiProjectPost>> => {
             const res = await fetch('/api/project', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({name, base64Url}),
+                body: JSON.stringify({token, name, base64Url}),
             });
             return await res.json();
         },
@@ -46,7 +46,6 @@ const api = {
         },
         login: {
             POST: async (token: string, username: string, password: string): Promise<ResponseBase<ApiAccountLoginGet>> => {
-                console.log({token, username, password});
                 const res = await fetch("/api/account/login", {
                     method: "POST",
                     body: JSON.stringify({token, username, password}),
