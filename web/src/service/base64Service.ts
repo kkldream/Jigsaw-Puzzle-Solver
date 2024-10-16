@@ -1,3 +1,5 @@
+import {loadImage} from 'canvas';
+
 export function imageFileToBase64Url(file: File): Promise<string> {
     return new Promise<string>((resolve) => {
         const reader = new FileReader();
@@ -29,6 +31,17 @@ export function base64UrlToFileTypeAndExtension(base64Url: string) {
     } else {
         throw new Error("Invalid Base64 string format");
     }
+}
+
+export function base64UrlToWidthAndHeight(base64Url: string) {
+    return new Promise<{ width: number, height: number }>(async (resolve, reject) => {
+        try {
+            const img = await loadImage(base64Url);
+            resolve({width: img.width, height: img.height});
+        } catch (error) {
+            reject(error);
+        }
+    });
 }
 
 export function base64ToBase64Url(base64: string) {

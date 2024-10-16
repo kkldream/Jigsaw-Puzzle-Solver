@@ -11,7 +11,7 @@ export async function GET(request: Request) {
         return ResponseSuccess<ProjectItem>({
             id: projectId,
             name: doc.name,
-            imageUrl: doc.imageUrl,
+            image: doc.image,
         });
     } catch (e) {
         console.error(e);

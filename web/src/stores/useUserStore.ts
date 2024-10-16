@@ -29,12 +29,12 @@ export const useUserStore = create<UserStore>()((set) => ({
 }));
 
 export const useSyncUserFromCookies = () => {
-    const userStore = useUserStore();
+    const userLogin = useUserStore(state => state.login);
     useEffect(() => {
         const userId = Cookies.get('userId') || "";
         const token = Cookies.get('token') || "";
         if (userId !== "" && token !== "") {
-            userStore.login(userId, token, false);
+            userLogin(userId, token, false);
         }
-    }, []);
+    }, [userLogin]);
 };

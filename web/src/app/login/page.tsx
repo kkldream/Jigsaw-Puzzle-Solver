@@ -38,7 +38,7 @@ export default function Page() {
             setError("發生錯誤，請稍後再試。");
             console.error("Login error:", err);
         }
-    }, [username, password, remember, router]);
+    }, [username, password, remember, from, router, userStore]);
 
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">

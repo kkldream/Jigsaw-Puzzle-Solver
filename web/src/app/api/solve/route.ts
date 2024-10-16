@@ -21,7 +21,7 @@ export async function POST(request: Request) {
         const projectDoc = await db.project.findById(projectId).exec();
         if (!projectDoc) return ResponseFail(new Error("projectDoc is null"));
         const input: SolverInput = {
-            complete_image_base64: await imageUrlToBase64(projectDoc.imageUrl),
+            complete_image_base64: await imageUrlToBase64(projectDoc.image.url),
             piece_image_base64: base64,
         };
         const result = await solver(input);

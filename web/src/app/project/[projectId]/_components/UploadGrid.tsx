@@ -2,6 +2,7 @@ import {ImageViewer} from "@/app/_components/ImageViewer";
 import {ProjectItem} from "@/app/api/project/route";
 import {ChangeEvent} from "react";
 import ImageHeaderText from "@/app/project/[projectId]/_components/ImageHeaderText";
+import NextImg from "next/image";
 
 export default function UploadGrid(props: {
     projectDoc: ProjectItem | null;
@@ -13,7 +14,7 @@ export default function UploadGrid(props: {
             <div className="flex flex-col">
                 <ImageHeaderText text={"參考完整拼圖"}/>
                 <div className="flex-grow">
-                    <ImageViewer src={props.projectDoc?.imageUrl ?? ""} alt=""/>
+                    <ImageViewer src={props.projectDoc?.image.url ?? ""} alt=""/>
                 </div>
             </div>
             <div className="flex flex-col">
@@ -27,8 +28,10 @@ export default function UploadGrid(props: {
                             {props.uploadImageFile ? (
                                 <div
                                     className="group aspect-h-7 aspect-w-10 overflow-hidden rounded-lg bg-gray-100">
-                                    <img src={URL.createObjectURL(props.uploadImageFile)}
-                                         className="object-contain group-hover:opacity-75"/>
+                                    <NextImg className="object-contain group-hover:opacity-75"
+                                             src={URL.createObjectURL(props.uploadImageFile)}
+                                             fill
+                                             alt="uploadImageFile"/>
                                 </div>
                             ) : (
                                 <div>

@@ -28,7 +28,8 @@ export default function NewProjectModel(props: {
         setUploadLoading(true);
         if (isOk) {
             if (!checkCanUpload) throw new Error("Invalid input");
-            const res = await api.project.POST(userToken, projectName, await imageFileToBase64Url(imageFile as File));
+            const res = await api.project.POST(
+                userToken, projectName, await imageFileToBase64Url(imageFile as File));
             if (res.success) {
                 router.push(`/project/${res.result.projectId}`);
                 return;
@@ -103,7 +104,8 @@ export default function NewProjectModel(props: {
                                                     className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer"
                                                 >
                                                     {imageFile ?
-                                                        <ImageViewer src={URL.createObjectURL(imageFile)} alt=""/>
+                                                        <ImageViewer src={URL.createObjectURL(imageFile)}
+                                                                     alt="image"/>
                                                         : <span
                                                             className="m-8 block text-sm font-semibold text-gray-900">上傳完整拼圖</span>}
                                                 </label>

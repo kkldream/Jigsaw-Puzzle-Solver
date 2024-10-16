@@ -20,7 +20,9 @@ export default function ProjectMenu(props: { max?: number }) {
             {projects.map(project => (
                 <li key={project.id}>
                     <div>
-                        <ImageViewer src={project.imageUrl}
+                        <ImageViewer src={project.image.url}
+                                     width={project.image.width}
+                                     height={project.image.height}
                                      alt={project.name}
                                      href={`/project/${project.id}`}/>
                         <p className="mt-2 block truncate text-sm font-medium text-gray-900">{project.name}</p>

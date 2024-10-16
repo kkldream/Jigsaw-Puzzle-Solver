@@ -2,11 +2,12 @@ import {ResponseFail, ResponseSuccess} from "@/app/api/responseMethod";
 import db from "@/service/dbService";
 import aws from "@/service/awsService";
 import {verifyUser} from "@/app/api/_services/verifyService";
+import {ImageItem} from "@/models/types/ImageItem";
 
 export interface ProjectItem {
     id: string;
     name: string;
-    imageUrl: string;
+    image: ImageItem;
 }
 
 export interface ApiProjectGet {
@@ -26,10 +27,15 @@ export async function GET(request: Request) {
             .sort({createdAt: -1})
             .limit(limit)
             .exec();
-        const projects = files.map(file => ({
+        const projects: ProjectItem[] = files.map(file => ({
             id: file._id.toString(),
             name: file.name,
-            imageUrl: file.imageUrl,
+            image: {
+                url: file.image.url,
+                width: file.image.width,
+                height: file.image.height,
+                format: file.image.format,
+            },
         }));
         return ResponseSuccess<ApiProjectGet>({projects});
     } catch (e) {
@@ -45,7 +51,7 @@ export async function POST(request: Request) {
         const result = await aws.s3.uploadImage(base64Url, `puzzle/${name}-${new Date().getTime()}`);
         const doc = await db.project.create({
             name: name,
-            imageUrl: result,
+            image: result,
         });
         return ResponseSuccess<ApiProjectPost>({
             projectId: doc._id.toString(),

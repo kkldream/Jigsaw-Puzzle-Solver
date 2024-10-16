@@ -1,6 +1,7 @@
 import {PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
 import {Buffer} from 'buffer';
-import {base64UrlToFileTypeAndExtension} from "@/service/base64Service";
+import {base64UrlToFileTypeAndExtension, base64UrlToWidthAndHeight} from "@/service/base64Service";
+import {ImageItem} from "@/models/types/ImageItem";
 
 const s3AccessKeyId = process.env.AWS_ACCESS_KEY_ID;
 const s3SecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
@@ -20,9 +21,10 @@ function getAwsClient() {
 
 const aws = {
     s3: {
-        uploadImage: async (base64Url: string, path: string): Promise<string> => {
+        uploadImage: async (base64Url: string, path: string): Promise<ImageItem> => {
             const client = getAwsClient();
             const {fileType, extension} = base64UrlToFileTypeAndExtension(base64Url);
+            const {width, height} = await base64UrlToWidthAndHeight(base64Url);
             const key = `prod/${path}.${extension}`;
             const result = await client.send(new PutObjectCommand({
                 Bucket: bucketName,
@@ -34,7 +36,11 @@ const aws = {
             }));
             if (result.$metadata.httpStatusCode !== 200)
                 throw new Error('Failed to upload file to S3');
-            return `https://${bucketName}.s3.${s3Region}.amazonaws.com/${key}`
+            return {
+                url: `https://${bucketName}.s3.${s3Region}.amazonaws.com/${key}`,
+                width, height,
+                format: fileType,
+            };
         },
     },
 };
