@@ -19,7 +19,7 @@ export default function Page() {
         event.preventDefault();
         setError('');
         try {
-            const tokenRes = await api.account.token.GET();
+            const tokenRes = await api.account.token.POST();
             if (!tokenRes.success) {
                 setError("發生錯誤，請稍後再試。");
                 console.error("Login error:", tokenRes.error?.message);

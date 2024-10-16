@@ -1,18 +1,17 @@
 import {ResponseFail, ResponseSuccess} from "@/app/api/responseMethod";
 
-export interface ApiAccountTokenGet {
+export interface ApiAccountTokenPost {
     authToken: string;
 }
 
-export async function GET() {
+export async function POST() {
     try {
-        // TODO：來源因該改用 POST 方法
         const res = await fetch("https://account.julojulo.club/api/account/token", {
-            cache: "no-store",
+            method: "POST",
         });
         if (!res.ok) return ResponseFail(new Error("Failed to get token"));
-        const data = await res.json() as ApiAccountTokenGet;
-        return ResponseSuccess<ApiAccountTokenGet>(data);
+        const data = await res.json() as ApiAccountTokenPost;
+        return ResponseSuccess<ApiAccountTokenPost>(data);
     } catch (e) {
         console.error(e);
         return ResponseFail(e);

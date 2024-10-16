@@ -1,7 +1,7 @@
 import {ResponseBase} from "@/app/api/responseMethod";
 import {ApiProjectGet, ApiProjectPost, ProjectItem} from "@/app/api/project/route";
 import {ApiSolvePost} from "@/app/api/solve/route";
-import {ApiAccountTokenGet} from "@/app/api/account/token/route";
+import {ApiAccountTokenPost} from "@/app/api/account/token/route";
 import {ApiAccountLoginGet} from "@/app/api/account/login/route";
 
 const api = {
@@ -37,9 +37,9 @@ const api = {
     },
     account: {
         token: {
-            GET: async (): Promise<ResponseBase<ApiAccountTokenGet>> => {
+            POST: async (): Promise<ResponseBase<ApiAccountTokenPost>> => {
                 const res = await fetch("/api/account/token", {
-                    cache: "no-store",
+                    method: "POST",
                 });
                 return await res.json();
             },
