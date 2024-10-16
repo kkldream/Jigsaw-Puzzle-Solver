@@ -10,7 +10,7 @@ export interface UserStore {
     logout: () => void;
 }
 
-export const useUserStore = create<UserStore>()((set, get) => ({
+export const useUserStore = create<UserStore>()((set) => ({
     userId: "",
     token: "",
     isLogin: false,
