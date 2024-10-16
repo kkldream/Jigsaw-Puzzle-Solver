@@ -6,7 +6,7 @@ import {useState} from "react";
 import {useUserStore} from "@/stores/useUserStore";
 
 export default function Page() {
-    const userIsLogin = useUserStore(state => state.isLogin());
+    const userStore = useUserStore();
     const [modelShow, setModelShow] = useState<boolean>(false);
     return (
         <>
@@ -21,11 +21,10 @@ export default function Page() {
                         </p>
                         <div className="mt-10 flex items-center justify-center gap-x-6">
                             <button
-                                className={`rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm
-                                            ${!userIsLogin ? "bg-gray-500" : "bg-indigo-600 hover:bg-indigo-500"}
-                                            focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+                                className={`rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600
+                                            ${!userStore.isLogin ? "bg-gray-500" : "bg-indigo-600 hover:bg-indigo-500"}`}
                                 onClick={() => setModelShow(true)}
-                                disabled={!userIsLogin}
+                                disabled={!userStore.isLogin}
                             >
                                 New Project
                             </button>

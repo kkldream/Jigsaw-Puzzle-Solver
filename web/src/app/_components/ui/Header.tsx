@@ -62,7 +62,7 @@ export default function Header() {
                         ))}
                     </div>
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                        {(pathname && pathname !== "/login") && (userStore.isLogin() ? (
+                        {(pathname && pathname !== "/login") && (userStore.isLogin ? (
                             <button className="text-sm font-semibold leading-6 text-gray-900"
                                     onClick={logout}>
                                 Log out <span aria-hidden="true">&rarr;</span>
@@ -111,7 +111,7 @@ export default function Header() {
                                     ))}
                                 </div>
                                 <div className="py-6">
-                                    {pathname && (userStore.isLogin() ? (
+                                    {pathname && (userStore.isLogin ? (
                                         <button
                                             className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                             onClick={logout}>
