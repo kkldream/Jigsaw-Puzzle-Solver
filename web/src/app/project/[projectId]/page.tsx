@@ -9,6 +9,7 @@ import {SolveUrlItem} from "@/app/project/[projectId]/_type/SolveUrlItem";
 import {ProjectItem} from "@/app/api/project/route";
 import UploadGrid from "@/app/project/[projectId]/_components/UploadGrid";
 import {useUserStore} from "@/stores/useUserStore";
+import {resizeImage} from "@/service/imageService";
 
 export default function Page({params}: { params: { projectId: string } }) {
     const {projectId} = params;
@@ -33,7 +34,8 @@ export default function Page({params}: { params: { projectId: string } }) {
         setSearchLoading(true);
         try {
             if (!uploadImageFile) throw new Error("uploadImageFile is null");
-            const res = await api.solve.POST(userStore.token, projectId, await imageFileToBase64(uploadImageFile));
+            const resizeImageFile = await resizeImage(uploadImageFile);
+            const res = await api.solve.POST(userStore.token, projectId, await imageFileToBase64(resizeImageFile));
             setResultImages(res.result.solves.map(item => ({
                 name: item.name,
                 base64Url: base64ToBase64Url(item.base64),
