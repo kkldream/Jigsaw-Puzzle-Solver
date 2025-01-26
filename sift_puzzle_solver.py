@@ -3,21 +3,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def match_piece_to_image(complete_image, piece_image):
-    # 读取图像
-    complete_image_gray = cv2.cvtColor(complete_image, cv2.COLOR_BGR2GRAY)
-    piece_image_gray = cv2.cvtColor(piece_image, cv2.COLOR_BGR2GRAY)  # 将拼图图像转换为灰度图像
+    # Optional: color histogram equalization or contrast adjustment
+    complete_image_eq = cv2.convertScaleAbs(complete_image, alpha=1.2, beta=10)
+    piece_image_eq = cv2.convertScaleAbs(piece_image, alpha=1.2, beta=10)
 
-    complete_image_height, complete_image_width = complete_image_gray.shape[:2]
-    piece_image_height, piece_image_width = piece_image_gray.shape[:2]
+    complete_image_height, complete_image_width = complete_image.shape[:2]
+    piece_image_height, piece_image_width = piece_image.shape[:2]
     draw_line_thickness = max(1, int(min(complete_image_height, complete_image_width) * 0.005))  # 使用短邊的0.5%，最小為1像素
 
-    # 初始化SIFT检测器和暴力匹配器
-    sift = cv2.SIFT_create(nfeatures=0, nOctaveLayers=3, contrastThreshold=0.04, edgeThreshold=10, sigma=1.6)
+    # Create SIFT with more features and different thresholds
+    sift = cv2.SIFT_create(nfeatures=100000, nOctaveLayers=40, contrastThreshold=0.01, edgeThreshold=5, sigma=1.6)
     bf = cv2.BFMatcher()
 
-    # 特征提取
-    kp2, des2 = sift.detectAndCompute(complete_image_gray, None)
-    kp1, des1 = sift.detectAndCompute(piece_image_gray, None)
+    # Feature extraction on color images (removing grayscale step)
+    kp2, des2 = sift.detectAndCompute(complete_image_eq, None)
+    kp1, des1 = sift.detectAndCompute(piece_image_eq, None)
 
     # 特征匹配
     matches = bf.knnMatch(des1, des2, k=2)
@@ -52,7 +52,7 @@ def match_piece_to_image(complete_image, piece_image):
         cv2.rectangle(final_complete_image, top_left, bottom_right, (0, 0, 255), draw_line_thickness)
 
     # 绘制匹配结果
-    matched_piece_image = cv2.drawMatches(piece_image_gray, kp1, complete_image_gray, kp2, good, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)  # 添加 matchColor 参数
+    matched_piece_image = cv2.drawMatches(piece_image_eq, kp1, complete_image_eq, kp2, good, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)  # 添加 matchColor 参数
 
     return matched_piece_image, final_complete_image  # 添加完整图像作为返回值
 
