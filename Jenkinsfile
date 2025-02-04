@@ -20,9 +20,9 @@ docker build \\
           steps {
             withCredentials(bindings: [
                                           string(credentialsId: 'jigsaw_puzzle_solver-mongodb_url', variable: 'MONGODB_URL'),
-                                          string(credentialsId: 'kk_aws_access_key_id', variable: 'AWS_ACCESS_KEY_ID'),
-                                          string(credentialsId: 'kk_aws_secret_access_key', variable: 'AWS_SECRET_ACCESS_KEY'),
-                                          string(credentialsId: 'kk_aws_region', variable: 'AWS_REGION')
+                                          string(credentialsId: 'kk-aws_access_key_id', variable: 'AWS_ACCESS_KEY_ID'),
+                                          string(credentialsId: 'kk-aws_secret_access_key', variable: 'AWS_SECRET_ACCESS_KEY'),
+                                          string(credentialsId: 'kk-aws_region', variable: 'AWS_REGION')
                                         ]) {
                 sh '''run_name=jk-${PROJECT_NAME}-${BRANCH_NAME}
 build_name=jenkins/${PROJECT_NAME}:${BRANCH_NAME}-${BUILD_NUMBER}
