@@ -13,7 +13,7 @@ const db = {
         return mongoose.STATES[mongoose.connection.readyState];
     },
 
-    project: getModel<ProjectDocument>("projects", projectSchema),
+    project: getModel<ProjectDocument>("project", projectSchema),
 };
 
 function getModel<T>(modelName: string, schema: mongoose.Schema): mongoose.Model<T> {
