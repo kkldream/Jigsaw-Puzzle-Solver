@@ -4,7 +4,9 @@ import {ProjectDocument, projectSchema} from "@/models/schema/projectSchema";
 const db = {
     connect: async (mongodbUri: string | undefined) => {
         if (!mongodbUri) throw new Error("MONGODB_URI is not set");
-        await mongoose.connect(mongodbUri)
+        await mongoose.connect(mongodbUri, {
+            dbName: "jigsaw-puzzle-solver",
+        });
     },
 
     get status() {
