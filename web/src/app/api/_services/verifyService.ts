@@ -1,5 +1,5 @@
 export async function verifyUser(token: string): Promise<void> {
-    const res = await fetch("https://account.julojulo.club/api/third/verify/user", {
+    const res = await fetch("https://account.julojulo.com/api/third/verify/user", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
