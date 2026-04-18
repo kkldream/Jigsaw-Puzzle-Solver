@@ -6,7 +6,7 @@ export interface ApiAccountTokenPost {
 
 export async function POST() {
     try {
-        const res = await fetch("https://account.julojulo.club/api/account/token", {
+        const res = await fetch("https://account.julojulo.com/api/account/token", {
             method: "POST",
         });
         if (!res.ok) return ResponseFail(new Error("Failed to get token"));

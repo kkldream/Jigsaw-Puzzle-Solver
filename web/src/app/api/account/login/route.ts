@@ -7,7 +7,7 @@ export interface ApiAccountLoginGet {
 export async function POST(request: Request) {
     try {
         const {token, username, password} = await request.json();
-        const res = await fetch("https://account.julojulo.club/api/account/login", {
+        const res = await fetch("https://account.julojulo.com/api/account/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
