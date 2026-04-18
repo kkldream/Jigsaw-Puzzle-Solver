@@ -18,8 +18,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: yarn
-          cache-dependency-path: web/yarn.lock
+
+      - name: Enable Corepack Yarn
+        run: |
+          corepack enable
+          corepack prepare yarn@1.22.22 --activate
 
       - name: Install dependencies
         working-directory: web
