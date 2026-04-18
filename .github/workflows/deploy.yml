@@ -1,0 +1,84 @@
+name: Deploy to K8s
+
+on:
+  push:
+    branches: [main, dev]
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: jigsaw-puzzle-solver
+  IMAGE_REGISTRY: registry.kkserver.net
+  K8S_NAMESPACE: apps
+
+jobs:
+  deploy:
+    runs-on: kkldream-jigsaw-puzzle-solver
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set deploy context
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          REF_NAME="${{ github.ref_name }}"
+          if [[ "$REF_NAME" != "main" && "$REF_NAME" != "dev" ]]; then
+            echo "Unsupported branch for deployment: $REF_NAME" >&2
+            exit 1
+          fi
+
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          REF_SLUG=$(echo "$REF_NAME" | tr '[:upper:]' '[:lower:]' | sed -E 's#[^a-z0-9._-]+#-#g; s#-+#-#g; s#(^[-.]+|[-.]+$)##g')
+          IMAGE_TAG="${REF_SLUG}-${SHORT_SHA}"
+          IMAGE_REF="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}"
+          DEPLOY_BRANCH="$REF_NAME"
+
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> "$GITHUB_ENV"
+          echo "IMAGE_REF=${IMAGE_REF}" >> "$GITHUB_ENV"
+          echo "DEPLOY_BRANCH=${DEPLOY_BRANCH}" >> "$GITHUB_ENV"
+          echo "SECRET_NAME=jigsaw-puzzle-solver-secrets-${DEPLOY_BRANCH}" >> "$GITHUB_ENV"
+          echo "KUSTOMIZE_DIR=k8s/overlays/${DEPLOY_BRANCH}" >> "$GITHUB_ENV"
+          echo "RESOURCE_NAME=jigsaw-puzzle-solver-${DEPLOY_BRANCH}" >> "$GITHUB_ENV"
+
+          echo "Deploy context: branch=${DEPLOY_BRANCH} image_tag=${IMAGE_TAG} image_ref=${IMAGE_REF}"
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --progress=plain \
+            -t "${IMAGE_REF}:${IMAGE_TAG}" \
+            -f Dockerfile \
+            .
+
+      - name: Push image to registry
+        run: |
+          docker push "${IMAGE_REF}:${IMAGE_TAG}"
+
+      - name: Create or update secrets
+        run: |
+          kubectl create secret generic "${SECRET_NAME}" \
+            --namespace="${{ env.K8S_NAMESPACE }}" \
+            --from-literal=MONGODB_URL="${{ secrets.MONGODB_URL }}" \
+            --from-literal=AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            --from-literal=AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+            --from-literal=AWS_REGION="${{ secrets.AWS_REGION }}" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy to Kubernetes
+        shell: bash
+        run: |
+          set -euo pipefail
+          sed -i "s|newTag: .*|newTag: ${IMAGE_TAG}|g" "${KUSTOMIZE_DIR}/kustomization.yaml"
+          kubectl apply -k "${KUSTOMIZE_DIR}"
+
+      - name: Verify deployment
+        run: |
+          kubectl rollout status "deployment/${RESOURCE_NAME}" \
+            -n "${{ env.K8S_NAMESPACE }}" \
+            --timeout=120s
+          echo "========== Pods =========="
+          kubectl get pods -n "${{ env.K8S_NAMESPACE }}" -l "app=${RESOURCE_NAME}"
+          echo "========== Service =========="
+          kubectl get svc "${RESOURCE_NAME}" -n "${{ env.K8S_NAMESPACE }}"
