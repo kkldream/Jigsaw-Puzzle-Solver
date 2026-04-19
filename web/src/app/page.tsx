@@ -16,7 +16,9 @@ export default function Home() {
                         lver
                     </h1>
                     <p className="mt-6 text-lg leading-8 text-gray-600">
-                        Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo.
+                        Jigsaw Puzzle Solver helps you locate where a loose puzzle piece belongs by comparing a
+                        partial-piece photo with the full puzzle reference image. From this homepage, you can review
+                        recent projects and jump back into the puzzles you have been working on.
                     </p>
                 </div>
                 <div className="mt-16 flow-root sm:mt-24">

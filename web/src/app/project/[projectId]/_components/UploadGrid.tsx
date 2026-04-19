@@ -36,7 +36,9 @@ export default function UploadGrid(props: {
                             ) : (
                                 <div>
                                     <span
-                                        className="m-8 block text-sm font-semibold text-gray-900">Upload a picture</span>
+                                        className="m-8 block text-sm font-semibold text-gray-900">
+                                            Upload a partial puzzle photo
+                                        </span>
                                 </div>
                             )}
                         </label>

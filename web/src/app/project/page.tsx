@@ -17,7 +17,9 @@ export default function Page() {
                             All Projects
                         </h1>
                         <p className="mt-6 text-lg leading-8 text-gray-600">
-                            Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo Julo.
+                            A project stores the full reference image for one puzzle so you can upload partial-piece
+                            photos and compare them later. Use New Project to create a fresh workspace by uploading the
+                            complete puzzle image first.
                         </p>
                         <div className="mt-10 flex items-center justify-center gap-x-6">
                             <button
