@@ -1,4 +1,7 @@
+import {isDevAuthBypassAllowed} from "@/lib/devAuthBypass";
+
 export async function verifyUser(token: string): Promise<void> {
+    if (isDevAuthBypassAllowed(token)) return;
     const res = await fetch("https://account.julojulo.com/api/third/verify/user", {
         method: "POST",
         headers: {

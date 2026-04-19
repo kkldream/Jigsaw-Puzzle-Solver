@@ -3,7 +3,10 @@
 import React, {FormEvent, useCallback, useState} from 'react';
 import {useRouter, useSearchParams} from "next/navigation";
 import api from "@/service/apiService";
+import {DEV_AUTH_BYPASS_TOKEN} from "@/lib/devAuthBypass";
 import {useUserStore} from "@/stores/useUserStore";
+
+const isNextDev = process.env.NODE_ENV === 'development';
 
 export default function Page() {
     const searchParams = useSearchParams();
@@ -39,6 +42,11 @@ export default function Page() {
             console.error("Login error:", err);
         }
     }, [username, password, remember, from, router, userStore]);
+
+    const bypassLogin = useCallback(() => {
+        userStore.login('dev-local', DEV_AUTH_BYPASS_TOKEN, true);
+        router.push(from ?? '/');
+    }, [from, router, userStore]);
 
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -123,6 +131,20 @@ export default function Page() {
                             <div className="text-red-600 text-sm mb-4">{error}</div>
                         )}
                     </form>
+                    {isNextDev && (
+                        <div className="mt-6 border-t border-dashed border-gray-300 pt-6">
+                            <p className="text-center text-xs text-gray-500 mb-3">
+                                本機開發：外部登入 API 故障時可略過（不會出現在 production build）
+                            </p>
+                            <button
+                                type="button"
+                                onClick={bypassLogin}
+                                className="flex w-full justify-center rounded-md bg-gray-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-600"
+                            >
+                                繞過登入（僅 dev）
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

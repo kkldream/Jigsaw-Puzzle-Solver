@@ -13,7 +13,7 @@ COPY python/ .
 RUN pyinstaller --onefile executable.py
 
 # 階段 2: 設置 Node.js 環境
-FROM node:18-slim
+FROM node:20-slim
 
 WORKDIR /app
 
@@ -35,8 +35,8 @@ RUN apt-get update && apt-get install -y \
 COPY --from=builder /app/dist/executable /app/dist/executable
 
 # 複製 Node.js 應用程序文件
-COPY web/package*.json ./
-RUN yarn
+COPY web/package.json web/yarn.lock ./
+RUN corepack enable && corepack prepare yarn@1.22.22 --activate && yarn install --frozen-lockfile
 
 COPY web/ .
 

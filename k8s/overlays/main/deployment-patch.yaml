@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jigsaw-puzzle-solver
+  namespace: apps
+  labels:
+    app: jigsaw-puzzle-solver-main
+spec:
+  selector:
+    matchLabels:
+      app: jigsaw-puzzle-solver-main
+  template:
+    metadata:
+      labels:
+        app: jigsaw-puzzle-solver-main
+    spec:
+      containers:
+        - name: jigsaw-puzzle-solver
+          envFrom:
+            - secretRef:
+                name: jigsaw-puzzle-solver-secrets-main
