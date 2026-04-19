@@ -37,7 +37,7 @@ export default function UploadGrid(props: {
                                 <div>
                                     <span
                                         className="m-8 block text-sm font-semibold text-gray-900">
-                                            Upload a partial puzzle photo
+                                            上傳局部拼圖片段照片
                                         </span>
                                 </div>
                             )}

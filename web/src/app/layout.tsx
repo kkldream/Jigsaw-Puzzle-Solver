@@ -17,7 +17,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
     title: "Jigsaw Puzzle Solver",
-    description: "Jigsaw Puzzle Solver helps you match an uploaded puzzle-piece photo against the full puzzle image and review visual feature-matching results in the browser.",
+    description: "Jigsaw Puzzle Solver 讓你先上傳完整拼圖影像，再上傳局部拼圖片段照片，並在瀏覽器中查看特徵分布與特徵匹配等比對結果圖。",
 };
 
 export default function RootLayout({children}: Readonly<{ children: React.ReactNode }>) {

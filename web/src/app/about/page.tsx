@@ -3,81 +3,68 @@ export default function Page() {
         <div className="px-6 py-24 sm:py-32 lg:px-8">
             <div className="mx-auto max-w-5xl">
                 <div className="mx-auto max-w-3xl text-center">
-                    <p className="text-base font-semibold leading-7 text-indigo-600">About the project</p>
+                    <p className="text-base font-semibold leading-7 text-indigo-600">關於這個專案</p>
                     <h2 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                        About Jigsaw Puzzle Solver
+                        關於 Jigsaw Puzzle Solver
                     </h2>
                     <p className="mt-6 text-lg leading-8 text-gray-600">
-                        Jigsaw Puzzle Solver is a puzzle-assistance web app built for the moment when you have one
-                        loose piece in hand and need help figuring out where it belongs. Instead of scanning the entire
-                        puzzle by eye, you upload a photo of the partial piece and compare it against a saved image of
-                        the complete puzzle.
+                        Jigsaw Puzzle Solver 是一個協助拼圖定位的網站工具。當你手上有一片不知道該放哪裡的拼圖時，
+                        不需要只靠肉眼反覆比對整張拼圖；你可以先保存完整拼圖影像，再上傳局部拼圖片段照片，讓系統協助你縮小可能位置。
                     </p>
                 </div>
 
                 <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-6 lg:grid-cols-3">
                     <div className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-200">
-                        <h3 className="text-lg font-semibold text-gray-900">What it does</h3>
+                        <h3 className="text-lg font-semibold text-gray-900">它能做什麼</h3>
                         <p className="mt-4 text-sm leading-6 text-gray-600">
-                            Each project begins with a reference image of the full puzzle. Once that image is saved,
-                            you can upload a partial-piece photo and let the app generate visual matching outputs that
-                            help narrow down the piece location.
+                            每個專案都會先建立一張完整拼圖的參考圖。完成後，你可以上傳局部拼圖片段照片，系統會產出視覺化的比對結果圖，幫助你更快找出這片拼圖可能的位置。
                         </p>
                     </div>
                     <div className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-200">
-                        <h3 className="text-lg font-semibold text-gray-900">Who it is for</h3>
+                        <h3 className="text-lg font-semibold text-gray-900">適合誰使用</h3>
                         <p className="mt-4 text-sm leading-6 text-gray-600">
-                            The app is useful for puzzle hobbyists, families working on large puzzles together, and
-                            anyone who wants a repeatable workflow for checking difficult pieces without losing track of
-                            progress.
+                            它適合喜歡拼圖的人、一起挑戰大拼圖的家庭，也適合想把比對流程整理得更清楚、不想每次都從頭重新找位置的使用者。
                         </p>
                     </div>
                     <div className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-200">
-                        <h3 className="text-lg font-semibold text-gray-900">Why it is practical</h3>
+                        <h3 className="text-lg font-semibold text-gray-900">為什麼實用</h3>
                         <p className="mt-4 text-sm leading-6 text-gray-600">
-                            Instead of relying on memory alone, the project keeps your reference image, project list,
-                            and result images together so you can return to the same puzzle later and continue from the
-                            browser.
+                            除了完整拼圖參考圖，專案也會把你的專案列表與比對結果圖整理在一起，之後回到同一個拼圖時，可以直接從瀏覽器接續查看，不必只靠記憶重找。
                         </p>
                     </div>
                 </div>
 
                 <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-8 lg:grid-cols-2">
                     <section className="rounded-2xl bg-gray-50 p-8 ring-1 ring-gray-200">
-                        <h3 className="text-xl font-semibold text-gray-900">How the workflow works</h3>
+                        <h3 className="text-xl font-semibold text-gray-900">使用流程</h3>
                         <ol className="mt-6 space-y-4 text-sm leading-6 text-gray-600">
-                            <li>1. Create a project and upload the complete puzzle image.</li>
-                            <li>2. Open the project when you want to inspect a specific puzzle piece.</li>
-                            <li>3. Upload a photo of the partial puzzle piece or local puzzle area.</li>
-                            <li>4. Review the generated result images, including feature distribution and matching.</li>
-                            <li>5. Use those visual cues to decide where the piece most likely belongs.</li>
+                            <li>1. 建立專案，先上傳完整拼圖影像作為參考。</li>
+                            <li>2. 需要確認某片拼圖位置時，開啟對應的專案。</li>
+                            <li>3. 上傳該片局部拼圖片段照片，或拍攝局部區域影像。</li>
+                            <li>4. 查看系統產生的結果圖，例如特徵分布與特徵匹配結果。</li>
+                            <li>5. 根據這些視覺化比對資訊，判斷拼圖最可能放置的位置。</li>
                         </ol>
                     </section>
 
                     <section className="rounded-2xl bg-gray-50 p-8 ring-1 ring-gray-200">
-                        <h3 className="text-xl font-semibold text-gray-900">Technical approach</h3>
+                        <h3 className="text-xl font-semibold text-gray-900">技術做法</h3>
                         <ul className="mt-6 space-y-4 text-sm leading-6 text-gray-600">
-                            <li>Next.js powers the web interface and API routes.</li>
-                            <li>MongoDB stores project records and image metadata.</li>
-                            <li>AWS S3 stores uploaded puzzle images.</li>
-                            <li>Python with OpenCV and SIFT performs the image feature analysis.</li>
-                            <li>Docker, GitHub Actions, and Kubernetes support build and deployment workflows.</li>
+                            <li>網站介面與 API 由 Next.js 提供。</li>
+                            <li>MongoDB 用來保存專案資料與影像相關資訊。</li>
+                            <li>AWS S3 負責儲存上傳的拼圖圖片。</li>
+                            <li>Python 搭配 OpenCV 與 SIFT 進行影像特徵分析。</li>
+                            <li>Docker、GitHub Actions 與 Kubernetes 支援建置與部署流程。</li>
                         </ul>
                     </section>
                 </div>
 
                 <div className="mx-auto mt-16 max-w-4xl rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-200">
-                    <h3 className="text-xl font-semibold text-gray-900">What you can expect from the results</h3>
+                    <h3 className="text-xl font-semibold text-gray-900">你會看到哪些結果</h3>
                     <p className="mt-4 text-sm leading-6 text-gray-600">
-                        The solver does not simply return a single text answer. It produces result images that make the
-                        matching process easier to inspect, including views that show how image features are distributed
-                        and how the uploaded piece aligns with the reference puzzle. That makes the app useful both as a
-                        practical helper and as a transparent visual aid when the match is not obvious at first glance.
+                        Solver 不會只回傳一句簡單的文字答案，而是提供可以實際檢視的結果圖，讓你看到影像特徵如何分布、上傳的拼圖片段和完整拼圖之間如何匹配。遇到不容易一眼判斷的位置時，這些圖會比單純描述更有幫助。
                     </p>
                     <p className="mt-4 text-sm leading-6 text-gray-600">
-                        In short, Jigsaw Puzzle Solver is designed to turn a frustrating manual search task into a
-                        structured, repeatable workflow that combines image processing with a lightweight project
-                        management interface.
+                        整體來說，Jigsaw Puzzle Solver 想做的是把原本容易卡住的人工找片流程，整理成一套清楚、可重複使用的操作方式，讓影像比對與專案管理可以在同一個介面中完成。
                     </p>
                 </div>
             </div>

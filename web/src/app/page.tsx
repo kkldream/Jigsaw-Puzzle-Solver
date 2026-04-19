@@ -16,9 +16,8 @@ export default function Home() {
                         lver
                     </h1>
                     <p className="mt-6 text-lg leading-8 text-gray-600">
-                        Jigsaw Puzzle Solver helps you locate where a loose puzzle piece belongs by comparing a
-                        partial-piece photo with the full puzzle reference image. From this homepage, you can review
-                        recent projects and jump back into the puzzles you have been working on.
+                        Jigsaw Puzzle Solver 會先讓你上傳完整拼圖作為參考，再上傳手上的局部拼圖片段照片，
+                        系統會產出特徵分布與特徵匹配等比對結果圖，協助你判斷這片拼圖最可能的位置。你也可以從這裡快速查看最近的專案並繼續處理中的拼圖。
                     </p>
                 </div>
                 <div className="mt-16 flow-root sm:mt-24">
@@ -29,7 +28,7 @@ export default function Home() {
                 </div>
                 <div className="mt-10 flex items-center justify-center gap-x-6">
                     <a href="/project" className="text-sm font-semibold leading-6 text-gray-900">
-                        View More Projects <span aria-hidden="true">→</span>
+                        查看更多專案 <span aria-hidden="true">→</span>
                     </a>
                 </div>
             </div>
