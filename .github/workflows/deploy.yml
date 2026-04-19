@@ -13,6 +13,7 @@ env:
 jobs:
   deploy:
     runs-on: kkldream-jigsaw-puzzle-solver
+    environment: 'main'
 
     steps:
       - name: Checkout code
