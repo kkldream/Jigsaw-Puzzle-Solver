@@ -16,9 +16,12 @@ export const useUserStore = create<UserStore>()((set) => ({
     isLogin: false,
     login: (userId: string, token: string, remember: boolean) => {
         set({userId, token, isLogin: true});
-        if (remember) {
-            Cookies.set('userId', userId, {expires: 7});
-            Cookies.set('token', token, {expires: 7});
+        const isDev = process.env.NODE_ENV === 'development';
+        // 本機 dev：一律寫入 cookie（較長效期），方便測試不必勾「記住我」；正式環境維持僅 remember 時寫入
+        if (remember || isDev) {
+            const expires = isDev ? 365 : 7;
+            Cookies.set('userId', userId, {expires});
+            Cookies.set('token', token, {expires});
         }
     },
     logout: () => {
