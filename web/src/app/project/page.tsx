@@ -12,9 +12,9 @@ export default function Page() {
         <>
             <div className="py-12 sm:py-16 lg:pb-40">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div className="mx-auto max-w-2xl text-center">
+                    <div className="mx-auto max-w-3xl text-center">
                         <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-                            所有專案
+                            Projects
                         </h1>
                         <p className="mt-6 text-lg leading-8 text-gray-600">
                             每個專案都會保存一組完整拼圖參考圖，方便你之後上傳局部拼圖片段照片進行比對。開始新專案時，請先上傳完整拼圖影像，之後就能持續查看系統回傳的比對結果圖。

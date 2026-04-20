@@ -3,10 +3,7 @@ export default function Page() {
         <div className="px-6 py-24 sm:py-32 lg:px-8">
             <div className="mx-auto max-w-5xl">
                 <div className="mx-auto max-w-3xl text-center">
-                    <p className="text-base font-semibold leading-7 text-indigo-600">關於這個專案</p>
-                    <h2 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                        關於 Jigsaw Puzzle Solver
-                    </h2>
+                    <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">About</h2>
                     <p className="mt-6 text-lg leading-8 text-gray-600">
                         Jigsaw Puzzle Solver 是一個協助拼圖定位的網站工具。當你手上有一片不知道該放哪裡的拼圖時，
                         不需要只靠肉眼反覆比對整張拼圖；你可以先保存完整拼圖影像，再上傳局部拼圖片段照片，讓系統協助你縮小可能位置。
